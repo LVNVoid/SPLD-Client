@@ -205,7 +205,7 @@ export default function ReportFormModal({ open, onOpenChange, trigger }) {
                 placeholder="Jelaskan detail laporan..."
                 rows={4}
                 required
-                className="w-full resize-none"
+                className="w-full h-[120px] resize-none"
               />
             </div>
 
@@ -240,17 +240,17 @@ export default function ReportFormModal({ open, onOpenChange, trigger }) {
 
               <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-gray-400 transition-colors">
                 <div className="flex flex-col items-center gap-2">
-                  <Upload className="h-6 w-6 text-gray-400" />
-                  <div className="text-sm text-gray-600">
+                  <Upload className="h-6 w-6 " />
+                  <div className="text-sm text-muted-foreground">
                     <Label
                       htmlFor="images"
-                      className="cursor-pointer text-blue-600 hover:text-blue-500"
+                      className="cursor-pointer text-blue-500 hover:text-blue-600"
                     >
                       Klik untuk memilih file
                     </Label>
                     {" atau drag & drop"}
                   </div>
-                  <p className="text-xs text-gray-500">
+                  <p className="text-xs text-muted-foreground">
                     PNG, JPG, JPEG hingga 10MB
                   </p>
                 </div>
@@ -269,7 +269,7 @@ export default function ReportFormModal({ open, onOpenChange, trigger }) {
                 <div className="grid grid-cols-3 gap-2">
                   {imagePreviews.map((preview, index) => (
                     <div key={index} className="relative group">
-                      <div className="aspect-square rounded-lg overflow-hidden border bg-gray-50">
+                      <div className="aspect-square rounded-lg overflow-hidden border">
                         <img
                           src={preview.url || "/placeholder.svg"}
                           alt={`Preview ${index + 1}`}
@@ -285,7 +285,7 @@ export default function ReportFormModal({ open, onOpenChange, trigger }) {
                       >
                         <X className="h-3 w-3" />
                       </Button>
-                      <p className="text-xs text-gray-500 mt-1 truncate text-center">
+                      <p className="text-xs text-muted-foreground mt-1 truncate text-center">
                         {preview.name}
                       </p>
                     </div>
@@ -302,7 +302,7 @@ export default function ReportFormModal({ open, onOpenChange, trigger }) {
             )}
 
             {/* Submit Buttons */}
-            <div className="flex gap-3 pt-4 sticky bottom-0 bg-white border-t -mx-6 px-6 py-4">
+            <div className="flex gap-3 pt-4 sticky bottom-0 border-t -mx-6 px-6 py-4">
               <Button
                 type="button"
                 variant="outline"

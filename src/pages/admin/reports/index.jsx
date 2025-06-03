@@ -5,22 +5,25 @@ import { Plus, Search } from "lucide-react";
 import useCrud from "@/hooks/useCrud";
 import ReportTable from "@/components/report/ReportTable";
 import ReportFormModal from "@/components/report/ReportFormModal";
+import toast from "react-hot-toast";
+import ReportTableSkeleton from "@/components/report/ReportTableSkeleton";
 
 export default function ReportPage() {
   const [searchQuery, setSearchQuery] = useState("");
-  const { data: reports, loading, error } = useCrud("reports");
+  const { data: reports, loading, error, refreshData } = useCrud("reports");
 
   const filteredReports = reports.filter((report) => {
     const matchesSearch =
       report.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      report.author.toLowerCase().includes(searchQuery.toLowerCase());
+      report.author.name.toLowerCase().includes(searchQuery.toLowerCase());
 
     return matchesSearch;
   });
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
-
+  const handleDeleteSuccess = () => {
+    refreshData();
+    toast.success("Data laporan berhasil dihapus");
+  };
   return (
     <div className="container mx-auto py-8 px-4">
       <div className="mb-4">
@@ -51,7 +54,17 @@ export default function ReportPage() {
       </div>
 
       <div className="rounded-md border">
-        <ReportTable reports={filteredReports} />
+        {error && (
+          <p className="text-center font-bold p-4 text-destructive">{error}</p>
+        )}
+        {loading ? (
+          <ReportTableSkeleton />
+        ) : (
+          <ReportTable
+            reports={filteredReports}
+            onDeleteSuccess={handleDeleteSuccess}
+          />
+        )}
       </div>
     </div>
   );

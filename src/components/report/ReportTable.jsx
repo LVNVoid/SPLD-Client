@@ -15,8 +15,31 @@ import {
 import { Button } from "@/components/ui/button";
 import { MoreHorizontal } from "lucide-react";
 import { formatDate, truncateText } from "@/lib/utils";
+import { Link } from "react-router-dom";
+import { useState } from "react";
+import useCrud from "@/hooks/useCrud";
+import DeleteModal from "../ui/delete-modal";
 
-export default function ReportTable({ reports }) {
+export default function ReportTable({ reports, onDeleteSuccess }) {
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [selectedReport, setSelectedReport] = useState(null);
+  const { deleteData, deleteLoading } = useCrud("reports");
+
+  const handleDeleteClick = (report) => {
+    setSelectedReport(report);
+    setDeleteModalOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    try {
+      await deleteData(selectedReport.id);
+      onDeleteSuccess?.();
+      setDeleteModalOpen(false);
+    } catch (error) {
+      console.error("Gagal menghapus laporan:", error);
+    }
+  };
+
   if (!reports.length) {
     return (
       <Table>
@@ -35,43 +58,63 @@ export default function ReportTable({ reports }) {
   }
 
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Judul Laporan</TableHead>
-          <TableHead>Deskripsi</TableHead>
-          <TableHead>Tanggal</TableHead>
-          <TableHead>Penulis</TableHead>
-          <TableHead></TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {reports.map((report) => (
-          <TableRow key={report.id}>
-            <TableCell className="font-medium">{report.title}</TableCell>
-            <TableCell className="font-medium">
-              {truncateText(report.description, 50)}
-            </TableCell>
-            <TableCell>{formatDate(report.date)}</TableCell>
-            <TableCell>{report.author.name}</TableCell>
-            <TableCell>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="h-8 w-8 p-0">
-                    <span className="sr-only">Open menu</span>
-                    <MoreHorizontal className="h-4 w-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem>View</DropdownMenuItem>
-                  <DropdownMenuItem>Edit</DropdownMenuItem>
-                  <DropdownMenuItem>Delete</DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </TableCell>
+    <>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Judul Laporan</TableHead>
+            <TableHead>Deskripsi</TableHead>
+            <TableHead>Tanggal</TableHead>
+            <TableHead>Penulis</TableHead>
+            <TableHead></TableHead>
           </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+        </TableHeader>
+        <TableBody>
+          {reports.map((report) => (
+            <TableRow key={report.id}>
+              <TableCell className="font-medium">{report.title}</TableCell>
+              <TableCell className="font-medium">
+                {truncateText(report.description, 50)}
+              </TableCell>
+              <TableCell>{formatDate(report.date)}</TableCell>
+              <TableCell>{report.author.name}</TableCell>
+              <TableCell>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="h-8 w-8 p-0">
+                      <span className="sr-only">Open menu</span>
+                      <MoreHorizontal className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem>
+                      <Link to={`/admin/report/${report.id}`}>
+                        Lihat detail
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>Ubah Laporan</DropdownMenuItem>
+                    <DropdownMenuItem
+                      className="text-red-600 focus:text-red-600"
+                      onClick={() => handleDeleteClick(report)}
+                    >
+                      Hapus
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+
+      <DeleteModal
+        isOpen={deleteModalOpen}
+        onClose={() => setDeleteModalOpen(false)}
+        onConfirm={handleConfirmDelete}
+        isLoading={deleteLoading}
+        title="Hapus Laporan"
+        description={`Anda akan menghapus laporan "${selectedReport?.title}". Tindakan ini tidak dapat dibatalkan.`}
+      />
+    </>
   );
 }

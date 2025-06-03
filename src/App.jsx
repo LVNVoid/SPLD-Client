@@ -13,7 +13,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import RedirectIfLoggedIn from "./components/RedirectIfLoggedIn";
 import LandingPage from "./pages/public/LandingPage";
 import PublicLayout from "./layouts/public/PublicLayout";
-import AddReportPage from "./pages/admin/reports/add";
+import DetailReportPage from "./pages/admin/reports/detail";
 
 const router = createBrowserRouter([
   {
@@ -41,7 +41,7 @@ const router = createBrowserRouter([
             path: "report",
             children: [
               { index: true, element: <ReportPage /> },
-              { path: "add", element: <AddReportPage /> },
+              { path: ":id", element: <DetailReportPage /> },
             ],
           },
         ],
