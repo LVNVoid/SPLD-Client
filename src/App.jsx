@@ -1,8 +1,8 @@
-import DashboardPage from "./pages/DashboardPage";
-import NarrativePage from "./pages/NarrativePage";
-import ProfilePage from "./pages/ProfilePage";
-import UserPage from "./pages/UserPage";
-import ReportPage from "./pages/ReportPage";
+import DashboardPage from "./pages/admin/DashboardPage";
+import NarrativePage from "./pages/admin/NarrativePage";
+import ProfilePage from "./pages/admin/ProfilePage";
+import UserPage from "./pages/admin/UserPage";
+import ReportPage from "./pages/admin/reports";
 import LoginPage from "./pages/auth/LoginPage";
 import AdminLayout from "./layouts/admin/AdminLayout";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -11,8 +11,21 @@ import { LoginAction } from "./pages/auth/LoginPage";
 import { store } from "./store";
 import PrivateRoute from "./components/PrivateRoute";
 import RedirectIfLoggedIn from "./components/RedirectIfLoggedIn";
+import LandingPage from "./pages/public/LandingPage";
+import PublicLayout from "./layouts/public/PublicLayout";
+import AddReportPage from "./pages/admin/reports/add";
 
 const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <PublicLayout />,
+    children: [
+      {
+        index: true,
+        element: <LandingPage />,
+      },
+    ],
+  },
   {
     path: "/admin",
     element: <PrivateRoute />,
@@ -24,7 +37,13 @@ const router = createBrowserRouter([
           { path: "narrative", element: <NarrativePage /> },
           { path: "profile", element: <ProfilePage /> },
           { path: "user", element: <UserPage /> },
-          { path: "report", element: <ReportPage /> },
+          {
+            path: "report",
+            children: [
+              { index: true, element: <ReportPage /> },
+              { path: "add", element: <AddReportPage /> },
+            ],
+          },
         ],
       },
     ],
