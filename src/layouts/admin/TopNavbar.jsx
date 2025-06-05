@@ -44,26 +44,8 @@ export function TopNavbar({
           </Link>
         </div>
 
-        {/* Search Bar - Desktop Only */}
-        {/* <div className="hidden md:flex flex-1 max-w-md mx-4">
-          <div className="relative w-full">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Search..."
-              className="w-full pl-10 h-9 bg-muted/50"
-            />
-          </div>
-        </div> */}
-
         {/* Navbar Right Items */}
         <div className="flex items-center gap-2 md:gap-4">
-          {/* Notifications */}
-          <Button variant="ghost" size="icon" className="relative">
-            <Bell className="h-5 w-5" />
-            <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-destructive"></span>
-            <span className="sr-only">Notifications</span>
-          </Button>
-
           {/* Theme Toggle */}
           {isMounted && (
             <Button

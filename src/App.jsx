@@ -1,8 +1,8 @@
-import DashboardPage from "./pages/admin/DashboardPage";
-import NarrativePage from "./pages/admin/NarrativePage";
-import ProfilePage from "./pages/admin/ProfilePage";
-import UserPage from "./pages/admin/UserPage";
-import ReportPage from "./pages/admin/reports";
+import DashboardPage from "./pages/admin/dashboard";
+import NarrativePage from "./pages/admin/narrative";
+import ProfilePage from "./pages/admin/profile";
+import UserPage from "./pages/admin/user";
+import ReportPage from "./pages/admin/report";
 import LoginPage from "./pages/auth/LoginPage";
 import AdminLayout from "./layouts/admin/AdminLayout";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -13,7 +13,9 @@ import PrivateRoute from "./components/PrivateRoute";
 import RedirectIfLoggedIn from "./components/RedirectIfLoggedIn";
 import LandingPage from "./pages/public/LandingPage";
 import PublicLayout from "./layouts/public/PublicLayout";
-import DetailReportPage from "./pages/admin/reports/detail";
+import DetailReportPage from "./pages/admin/report/detail";
+import CreateNarrativePage from "./pages/admin/narrative/add";
+import PolsekPage from "./pages/admin/polsek";
 
 const router = createBrowserRouter([
   {
@@ -34,8 +36,21 @@ const router = createBrowserRouter([
         element: <AdminLayout />,
         children: [
           { index: true, element: <DashboardPage /> },
-          { path: "narrative", element: <NarrativePage /> },
+          {
+            path: "narrative",
+            children: [
+              {
+                index: true,
+                element: <NarrativePage />,
+              },
+              {
+                path: "add/:id",
+                element: <CreateNarrativePage />,
+              },
+            ],
+          },
           { path: "profile", element: <ProfilePage /> },
+          { path: "polsek", element: <PolsekPage /> },
           { path: "user", element: <UserPage /> },
           {
             path: "report",

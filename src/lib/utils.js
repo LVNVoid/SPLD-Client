@@ -19,7 +19,7 @@ export const formatDate = (date) => {
   if (isNaN(parsedDate)) return "Tanggal tidak valid";
 
   return parsedDate.toLocaleDateString("id-ID", {
-    year: "2-digit",
+    year: "numeric",
     month: "long",
     day: "numeric",
   });

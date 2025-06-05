@@ -1,6 +1,12 @@
 import { useState, useEffect } from "react";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
-import { Home, FileText, User, ClipboardPlus } from "lucide-react";
+import {
+  LayoutDashboard,
+  BookText,
+  FileText,
+  Building,
+  Users,
+} from "lucide-react";
 import { useTheme } from "@/components/ThemeProvider";
 import { Sidebar } from "./Sidebar";
 import { TopNavbar } from "./TopNavbar";
@@ -30,22 +36,27 @@ const AdminLayout = () => {
     {
       name: "Dashboard",
       path: "/admin",
-      icon: <Home className="w-5 h-5" />,
+      icon: <LayoutDashboard className="w-5 h-5" />,
     },
     {
       name: "Narasi",
       path: "/admin/narrative",
-      icon: <FileText className="w-5 h-5" />,
+      icon: <BookText className="w-5 h-5" />,
     },
     {
       name: "Laporan",
       path: "/admin/report",
-      icon: <ClipboardPlus className="w-5 h-5" />,
+      icon: <FileText className="w-5 h-5" />,
+    },
+    {
+      name: "Data Polsek",
+      path: "/admin/polsek",
+      icon: <Building className="w-5 h-5" />,
     },
     {
       name: "Data Pengguna",
       path: "/admin/user",
-      icon: <User className="w-5 h-5" />,
+      icon: <Users className="w-5 h-5" />,
     },
   ];
 

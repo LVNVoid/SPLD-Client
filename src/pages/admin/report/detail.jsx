@@ -17,6 +17,8 @@ import {
   Download,
   Share2,
   RefreshCw,
+  User,
+  PlusCircle,
 } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 import ReportDetailSkeleton from "@/components/report/ReportDetailSkeleton";
@@ -92,19 +94,21 @@ export default function DetailReportPage() {
 
   if (error) {
     return (
-      <div className="max-w-4xl mx-auto p-6">
-        <Alert variant="destructive">
-          <AlertDescription>{error}</AlertDescription>
-        </Alert>
-        <div className="flex gap-2 mt-4">
-          <Button variant="outline" onClick={() => navigate("/admin/report")}>
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Kembali ke Daftar Laporan
-          </Button>
-          <Button variant="outline" onClick={handleRefresh}>
-            <RefreshCw className="mr-2 h-4 w-4" />
-            Coba Lagi
-          </Button>
+      <div className="flex flex-row justify-center items-center">
+        <div>
+          <Alert variant="destructive">
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+          <div className="flex gap-2 mt-4">
+            <Button variant="outline" onClick={() => navigate("/admin/report")}>
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Kembali ke Daftar Laporan
+            </Button>
+            <Button variant="outline" onClick={handleRefresh}>
+              <RefreshCw className="mr-2 h-4 w-4" />
+              Coba Lagi
+            </Button>
+          </div>
         </div>
       </div>
     );
@@ -153,11 +157,18 @@ export default function DetailReportPage() {
             <Share2 className="mr-2 h-4 w-4" />
             Bagikan
           </Button>
+          <Button
+            onClick={() => navigate(`/admin/narrative/add/${reportId}`)}
+            size="sm"
+          >
+            <PlusCircle className="mr-2 h4 w-4" />
+            Buat Narasi
+          </Button>
         </div>
       </div>
 
       {/* Main Content */}
-      <Card>
+      <Card className="bg-baclkground">
         <CardHeader>
           <div className="flex items-start justify-between">
             <div className="space-y-2">
@@ -170,8 +181,15 @@ export default function DetailReportPage() {
                   {formatDate(report.createdAt)}
                 </div>
                 <div className="flex items-center gap-1">
-                  <FileText className="h-4 w-4" />
-                  ID: {report.id}
+                  <div className="bg-gradient-to-r from-sky-400 to-indigo-600 rounded-full p-[2px] flex items-center justify-center">
+                    <Badge className="bg-background hover:bg-background text-foreground rounded-full border-none">
+                      {report.author.polsek?.name}
+                    </Badge>
+                  </div>
+                </div>
+                <div className="flex items-center gap-1">
+                  <User className="h-4 w-4" />
+                  {report.author.name}
                 </div>
               </div>
             </div>
@@ -183,7 +201,7 @@ export default function DetailReportPage() {
           <div>
             <h3 className="text-lg font-semibold mb-3">Deskripsi Laporan</h3>
             <div className="prose prose-sm max-w-none">
-              <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
+              <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
                 {report.description}
               </p>
             </div>
@@ -195,22 +213,21 @@ export default function DetailReportPage() {
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold flex items-center gap-2">
                   <ImageIcon className="h-5 w-5" />
-                  Gambar Pendukung
+                  Foto laporan
                 </h3>
-                <Badge variant="outline">{report.images.length} gambar</Badge>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
                 {report.images.map((image, index) => (
                   <div
                     key={index}
-                    className="relative group cursor-pointer rounded-lg overflow-hidden border bg-gray-50 aspect-square"
+                    className="relative group cursor-pointer rounded-lg overflow-hidden border  aspect-square"
                     onClick={() => handleImageClick(index)}
                   >
                     <img
                       src={image.url || "/placeholder.svg"}
                       alt={`Gambar ${index + 1}`}
-                      className="w-full h-full object-cover transition-transform group-hover:scale-105"
+                      className="w-full h-full object-contain transition-transform group-hover:scale-105"
                     />
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
                       <ZoomIn className="h-6 w-6 text-white opacity-0 group-hover:opacity-100 transition-opacity" />

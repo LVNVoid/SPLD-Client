@@ -26,14 +26,21 @@ import {
   Calendar,
 } from "lucide-react";
 
-export default function ReportFormModal({ open, onOpenChange, trigger }) {
-  const { createData } = useCrud("/reports");
+export default function ReportFormModal({
+  open,
+  onOpenChange,
+  trigger,
+  reportData = null,
+  onSuccess,
+}) {
+  const { createData, updateData } = useCrud("/reports");
 
   const [isOpen, setIsOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [date, setDate] = useState("");
   const [images, setImages] = useState([]);
+  const [existingImages, setExistingImages] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [imagePreviews, setImagePreviews] = useState([]);
@@ -41,6 +48,39 @@ export default function ReportFormModal({ open, onOpenChange, trigger }) {
   // Handle controlled/uncontrolled state
   const modalOpen = open !== undefined ? open : isOpen;
   const setModalOpen = onOpenChange || setIsOpen;
+
+  // Initialize form with reportData when modal opens or reportData changes
+  useEffect(() => {
+    if (modalOpen) {
+      if (reportData) {
+        // Mode edit - isi form dengan data laporan
+        setTitle(reportData.title || "");
+        setDescription(reportData.description || "");
+        setDate(reportData.date || new Date().toISOString().split("T")[0]);
+
+        // Set existing images and create previews
+        const existing =
+          reportData.images?.map((img) => ({
+            url: img.url,
+            name: img.name || `Gambar ${img.id}`,
+            id: img.id,
+            isExisting: true,
+          })) || [];
+
+        setExistingImages(existing);
+        setImagePreviews(existing);
+      } else {
+        // Mode create - reset form
+        setTitle("");
+        setDescription("");
+        setDate(new Date().toISOString().split("T")[0]);
+        setExistingImages([]);
+        setImagePreviews([]);
+      }
+      setImages([]);
+      setError(null);
+    }
+  }, [modalOpen, reportData]);
 
   const uploadImages = async (reportId, files) => {
     try {
@@ -68,31 +108,55 @@ export default function ReportFormModal({ open, onOpenChange, trigger }) {
 
   const handleImageChange = (e) => {
     const files = [...e.target.files];
-    if (files.length > 5) {
+    const totalImages =
+      imagePreviews.filter((p) => !p.isExisting).length + files.length;
+
+    if (totalImages > 5) {
       toast.error("Maksimal 5 gambar yang dapat diunggah");
       return;
     }
 
-    setImages(files);
+    setImages((prev) => [...prev, ...files]);
 
-    // Create previews
-    const previews = files.map((file) => ({
+    // Create previews for new files
+    const newPreviews = files.map((file) => ({
       file,
       url: URL.createObjectURL(file),
       name: file.name,
+      isNew: true,
     }));
-    setImagePreviews(previews);
+
+    setImagePreviews((prev) => [...prev, ...newPreviews]);
   };
 
   const removeImage = (index) => {
-    const newImages = images.filter((_, i) => i !== index);
-    const newPreviews = imagePreviews.filter((_, i) => i !== index);
+    const previewToRemove = imagePreviews[index];
 
-    // Revoke the URL to prevent memory leaks
-    URL.revokeObjectURL(imagePreviews[index].url);
+    if (previewToRemove.isNew) {
+      // Remove from new images array
+      setImages((prev) =>
+        prev.filter(
+          (_, i) => i !== index - imagePreviews.filter((p) => !p.isNew).length
+        )
+      );
+    } else {
+      // Mark existing image for deletion
+      setExistingImages((prev) =>
+        prev.map((img) =>
+          img.id === previewToRemove.id
+            ? { ...img, markedForDeletion: true }
+            : img
+        )
+      );
+    }
 
-    setImages(newImages);
-    setImagePreviews(newPreviews);
+    // Revoke the URL to prevent memory leaks if it's a new image
+    if (previewToRemove.isNew) {
+      URL.revokeObjectURL(previewToRemove.url);
+    }
+
+    // Remove from previews
+    setImagePreviews((prev) => prev.filter((_, i) => i !== index));
   };
 
   const resetForm = () => {
@@ -100,12 +164,15 @@ export default function ReportFormModal({ open, onOpenChange, trigger }) {
     setDescription("");
     setDate("");
     setImages([]);
+    setExistingImages([]);
     setError(null);
     setLoading(false);
 
-    // Clean up image previews
+    // Clean up image previews URLs
     imagePreviews.forEach((preview) => {
-      URL.revokeObjectURL(preview.url);
+      if (preview.isNew) {
+        URL.revokeObjectURL(preview.url);
+      }
     });
     setImagePreviews([]);
   };
@@ -116,28 +183,45 @@ export default function ReportFormModal({ open, onOpenChange, trigger }) {
     setError(null);
 
     try {
-      const newReport = await createData({
-        title,
-        description,
-        date,
-        images: [],
-      });
+      if (reportData) {
+        // Update existing report
+        const updatedReport = await updateData(reportData.id, {
+          title,
+          description,
+          date,
+          // Send only images that are not marked for deletion
+          images: existingImages.filter((img) => !img.markedForDeletion),
+        });
 
-      if (images.length > 0) {
-        await uploadImages(newReport.id, images);
+        // Upload new images if any
+        if (images.length > 0) {
+          await uploadImages(updatedReport.id, images);
+        }
+
+        toast.success("Laporan berhasil diperbarui");
+        onSuccess?.();
+      } else {
+        // Create new report
+        const newReport = await createData({
+          title,
+          description,
+          date,
+          images: [],
+        });
+
+        if (images.length > 0) {
+          await uploadImages(newReport.id, images);
+        }
+
+        toast.success("Laporan berhasil ditambahkan");
+        onSuccess?.();
       }
 
-      toast.success("Laporan berhasil ditambahkan");
       setModalOpen(false);
       resetForm();
-
-      // Optional: refresh the page or update the list
-      // navigate("/admin/report")
     } catch (err) {
       setError(
-        err.response?.data?.message ||
-          err.message ||
-          "Gagal menambahkan laporan"
+        err.response?.data?.message || err.message || "Gagal memproses laporan"
       );
     } finally {
       setLoading(false);
@@ -151,14 +235,6 @@ export default function ReportFormModal({ open, onOpenChange, trigger }) {
     }
   };
 
-  // Set today's date as default when modal opens
-  useEffect(() => {
-    if (modalOpen && !date) {
-      const today = new Date().toISOString().split("T")[0];
-      setDate(today);
-    }
-  }, [modalOpen]);
-
   return (
     <Dialog open={modalOpen} onOpenChange={handleOpenChange}>
       {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
@@ -167,11 +243,12 @@ export default function ReportFormModal({ open, onOpenChange, trigger }) {
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <FileText className="h-5 w-5" />
-            Tambah Laporan Baru
+            {reportData ? "Edit Laporan" : "Tambah Laporan Baru"}
           </DialogTitle>
           <DialogDescription>
-            Lengkapi formulir di bawah ini untuk menambahkan laporan baru ke
-            sistem.
+            {reportData
+              ? "Perbarui informasi laporan di bawah ini."
+              : "Lengkapi formulir di bawah ini untuk menambahkan laporan baru ke sistem."}
           </DialogDescription>
         </DialogHeader>
 
@@ -264,15 +341,17 @@ export default function ReportFormModal({ open, onOpenChange, trigger }) {
                 />
               </div>
 
-              {/* Image Previews */}
               {imagePreviews.length > 0 && (
                 <div className="grid grid-cols-3 gap-2">
                   {imagePreviews.map((preview, index) => (
-                    <div key={index} className="relative group">
+                    <div
+                      key={preview.id || preview.name}
+                      className="relative group"
+                    >
                       <div className="aspect-square rounded-lg overflow-hidden border">
                         <img
-                          src={preview.url || "/placeholder.svg"}
-                          alt={`Preview ${index + 1}`}
+                          src={preview.url}
+                          alt={preview.name}
                           className="w-full h-full object-cover"
                         />
                       </div>
@@ -294,14 +373,12 @@ export default function ReportFormModal({ open, onOpenChange, trigger }) {
               )}
             </div>
 
-            {/* Error Alert */}
             {error && (
               <Alert variant="destructive">
                 <AlertDescription>{error}</AlertDescription>
               </Alert>
             )}
 
-            {/* Submit Buttons */}
             <div className="flex gap-3 pt-4 sticky bottom-0 border-t -mx-6 px-6 py-4">
               <Button
                 type="button"
@@ -316,12 +393,12 @@ export default function ReportFormModal({ open, onOpenChange, trigger }) {
                 {loading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Mengirim...
+                    {reportData ? "Menyimpan..." : "Mengirim..."}
                   </>
                 ) : (
                   <>
                     <Upload className="mr-2 h-4 w-4" />
-                    Tambah Laporan
+                    {reportData ? "Simpan Perubahan" : "Tambah Laporan"}
                   </>
                 )}
               </Button>

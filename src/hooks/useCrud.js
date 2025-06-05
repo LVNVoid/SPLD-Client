@@ -235,7 +235,6 @@ export default function useCrud(endpoint, options = {}) {
   }, [endpoint, autoFetch, fetchData]);
 
   return {
-    // Data & States
     data,
     loading,
     error,
@@ -244,18 +243,16 @@ export default function useCrud(endpoint, options = {}) {
     deleteLoading,
     detailLoading,
 
-    // Methods
     fetchData,
-    getData, // New: Get single item by ID
+    getData,
     createData,
     updateData,
-    patchData, // New: Partial update
+    patchData,
     deleteData,
-    refreshData, // New: Refresh/re-fetch data
-    clearError, // New: Clear error state
-    resetState, // New: Reset all states
+    refreshData,
+    resetState,
+    clearError,
 
-    // Computed values
     isEmpty: Array.isArray(data) && data.length === 0,
     hasError: !!error,
     isLoading:

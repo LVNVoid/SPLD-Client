@@ -19,44 +19,43 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import useCrud from "@/hooks/useCrud";
 import DeleteModal from "../ui/delete-modal";
-import ReportFormModal from "./ReportFormModal";
 
-export default function ReportTable({ reports, onSuccess }) {
+export default function NarrativeTable({ narratives, onDeleteSuccess }) {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [editModalOpen, setEditModalOpen] = useState(false);
-  const [selectedReport, setSelectedReport] = useState(null);
-  const { deleteData, deleteLoading } = useCrud("reports");
+  //   const [editModalOpen, setEditModalOpen] = useState(false);
+  const [selectedNarrative, setSelectedNarrative] = useState(null);
+  const { deleteData, deleteLoading } = useCrud("narratives");
 
-  const handleDeleteClick = (report) => {
-    setSelectedReport(report);
+  const handleDeleteClick = (narrative) => {
+    setSelectedNarrative(narrative);
     setDeleteModalOpen(true);
   };
 
-  const handleEditClick = (report) => {
-    setSelectedReport(report);
-    setEditModalOpen(true);
-  };
+  //   const handleEditClick = (narrative) => {
+  //     setSelectedNarrative(narrative);
+  //     setEditModalOpen(true);
+  //   };
 
   const handleConfirmDelete = async () => {
     try {
-      await deleteData(selectedReport.id);
-      onSuccess?.();
+      await deleteData(selectedNarrative.id);
+      onDeleteSuccess?.();
       setDeleteModalOpen(false);
     } catch (error) {
-      console.error("Gagal menghapus laporan:", error);
+      console.error("Gagal menghapus narasi:", error);
     }
   };
 
-  if (!reports.length) {
+  if (!narratives.length) {
     return (
       <Table>
         <TableBody>
           <TableRow>
             <TableCell
-              colSpan={5}
+              colSpan={6}
               className="text-center py-4 text-muted-foreground"
             >
-              Tidak ada laporan yang ditemukan
+              Tidak ada narasi yang ditemukan
             </TableCell>
           </TableRow>
         </TableBody>
@@ -69,22 +68,26 @@ export default function ReportTable({ reports, onSuccess }) {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Judul Laporan</TableHead>
-            <TableHead>Deskripsi</TableHead>
-            <TableHead>Tanggal</TableHead>
+            <TableHead>Judul Narasi</TableHead>
+            <TableHead>Konten</TableHead>
+            <TableHead>Tanggal Publikasi</TableHead>
+            <TableHead>Status</TableHead>
             <TableHead>Penulis</TableHead>
             <TableHead></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {reports.map((report) => (
-            <TableRow key={report.id}>
-              <TableCell className="font-medium">{report.title}</TableCell>
-              <TableCell className="font-medium">
-                {truncateText(report.description, 50)}
+          {narratives.map((narrative) => (
+            <TableRow key={narrative.id}>
+              <TableCell className="font-medium">{narrative.title}</TableCell>
+              <TableCell>{truncateText(narrative.content, 50)}</TableCell>
+              <TableCell>
+                {narrative.publishedAt
+                  ? formatDate(narrative.publishedAt)
+                  : "-"}
               </TableCell>
-              <TableCell>{formatDate(report.date)}</TableCell>
-              <TableCell>{report.author?.polsek?.name ?? "-"}</TableCell>
+              <TableCell>{narrative.status}</TableCell>
+              <TableCell>{narrative.author?.name ?? "-"}</TableCell>
               <TableCell>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
@@ -95,16 +98,16 @@ export default function ReportTable({ reports, onSuccess }) {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem>
-                      <Link to={`/admin/report/${report.id}`}>
+                      <Link to={`/admin/narrative/${narrative.id}`}>
                         Lihat detail
                       </Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => handleEditClick(report)}>
-                      Ubah Laporan
+                    <DropdownMenuItem onClick={() => {}}>
+                      Ubah Narasi
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       className="text-red-600 focus:text-red-600"
-                      onClick={() => handleDeleteClick(report)}
+                      onClick={() => handleDeleteClick(narrative)}
                     >
                       Hapus
                     </DropdownMenuItem>
@@ -121,16 +124,16 @@ export default function ReportTable({ reports, onSuccess }) {
         onClose={() => setDeleteModalOpen(false)}
         onConfirm={handleConfirmDelete}
         isLoading={deleteLoading}
-        title="Hapus Laporan"
-        description={`Anda akan menghapus laporan "${selectedReport?.title}". Tindakan ini tidak dapat dibatalkan.`}
+        title="Hapus Narasi"
+        description={`Anda akan menghapus narasi "${selectedNarrative?.title}". Tindakan ini tidak dapat dibatalkan.`}
       />
-
-      <ReportFormModal
+      {/* 
+      <NarrativeFormModal
         open={editModalOpen}
         onOpenChange={setEditModalOpen}
-        reportData={selectedReport}
+        narrativeData={selectedNarrative}
         onSuccess={onSuccess}
-      />
+      /> */}
     </>
   );
 }
