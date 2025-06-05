@@ -23,7 +23,7 @@ export default function HeroSection() {
                 <Link to="/login">Masuk Sebagai Petugas</Link>
               </Button>
               <Button size="lg" variant="outline" asChild>
-                <Link to="/narasi">Lihat Narasi Publik</Link>
+                <Link to="/narrative">Lihat Narasi Publik</Link>
               </Button>
             </div>
           </div>

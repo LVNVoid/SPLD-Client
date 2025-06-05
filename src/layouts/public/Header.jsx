@@ -1,14 +1,14 @@
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
 import MobileNav from "./MobileNav";
 import { Moon, Sun } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Header = ({ theme, setTheme, isMounted }) => {
   return (
     <header className="border-b">
       <div className="px-4 py-4 flex items-center justify-between">
         <div className="flex items-center">
-          <Link href="/" className="text-2xl font-bold">
+          <Link to="/" className="text-2xl font-bold">
             SPLD
           </Link>
         </div>
@@ -16,25 +16,25 @@ const Header = ({ theme, setTheme, isMounted }) => {
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center space-x-6">
           <Link
-            href="#"
+            to="/"
             className="text-sm font-medium hover:text-primary transition-colors"
           >
             Beranda
           </Link>
           <Link
-            href="#"
+            to="/narrative"
             className="text-sm font-medium hover:text-primary transition-colors"
           >
             Narasi
           </Link>
           <Link
-            href="#"
+            to="/about-us"
             className="text-sm font-medium hover:text-primary transition-colors"
           >
             Tentang Kami
           </Link>
           <Link
-            href="#"
+            to="/contact"
             className="text-sm font-medium hover:text-primary transition-colors"
           >
             Kontak
@@ -62,7 +62,7 @@ const Header = ({ theme, setTheme, isMounted }) => {
             </Button>
           )}
           <Button asChild className="hidden md:inline-flex">
-            <Link href="/login">Masuk </Link>
+            <Link to={"/login"}>Masuk </Link>
           </Button>
           <MobileNav />
         </div>

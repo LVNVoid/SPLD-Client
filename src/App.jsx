@@ -3,19 +3,22 @@ import NarrativePage from "./pages/admin/narrative";
 import ProfilePage from "./pages/admin/profile";
 import UserPage from "./pages/admin/user";
 import ReportPage from "./pages/admin/report";
-import LoginPage from "./pages/auth/LoginPage";
+import LoginPage from "./pages/auth/login";
 import AdminLayout from "./layouts/admin/AdminLayout";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-import { LoginAction } from "./pages/auth/LoginPage";
+import { LoginAction } from "./pages/auth/login";
 import { store } from "./store";
 import PrivateRoute from "./components/PrivateRoute";
 import RedirectIfLoggedIn from "./components/RedirectIfLoggedIn";
-import LandingPage from "./pages/public/LandingPage";
+import PublicHomePage from "./pages/public/home";
 import PublicLayout from "./layouts/public/PublicLayout";
 import DetailReportPage from "./pages/admin/report/detail";
 import CreateNarrativePage from "./pages/admin/narrative/add";
 import PolsekPage from "./pages/admin/polsek";
+import PublicNarrativePage from "./pages/public/narrative";
+import PublicContactPage from "./pages/public/contact";
+import PublicAboutPage from "./pages/public/about";
 
 const router = createBrowserRouter([
   {
@@ -24,7 +27,19 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <LandingPage />,
+        element: <PublicHomePage />,
+      },
+      {
+        path: "narrative",
+        element: <PublicNarrativePage />,
+      },
+      {
+        path: "contact",
+        element: <PublicContactPage />,
+      },
+      {
+        path: "about-us",
+        element: <PublicAboutPage />,
       },
     ],
   },

@@ -1,6 +1,6 @@
 import HeroSection from "@/components/public/HeroSection";
 
-const LandingPage = () => {
+const PublicHomePage = () => {
   return (
     <div>
       <main className="flex-1">
@@ -10,4 +10,4 @@ const LandingPage = () => {
   );
 };
 
-export default LandingPage;
+export default PublicHomePage;
