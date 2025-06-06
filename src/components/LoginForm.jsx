@@ -9,16 +9,18 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Form } from "react-router-dom";
+import { Form, useNavigate } from "react-router-dom";
+import { ChevronLeft, Lock } from "lucide-react";
 
 export function LoginForm({ className, ...props }) {
+  const navigate = useNavigate();
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Card>
+      <Card className="bg-background">
         <CardHeader>
-          <CardTitle className="text-2xl">Login</CardTitle>
+          <CardTitle className="text-2xl">Masuk</CardTitle>
           <CardDescription>
-            Enter your email below to login to your account
+            Masuk ke akun Anda untuk kelola laporan dan dokumentasi.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -29,7 +31,7 @@ export function LoginForm({ className, ...props }) {
                 id="email"
                 name="email"
                 type="email"
-                placeholder="m@example.com"
+                placeholder="johndoe@example.com"
                 required
               />
             </div>
@@ -37,11 +39,28 @@ export function LoginForm({ className, ...props }) {
               <div className="flex items-center">
                 <Label htmlFor="password">Password</Label>
               </div>
-              <Input id="password" name="password" type="password" required />
+              <Input
+                id="password"
+                name="password"
+                type="password"
+                placeholder="*******"
+                required
+              />
             </div>
-            <Button type="submit" className="w-full mb-4">
-              Login
-            </Button>
+            <div className="flex w-full justify-end space-x-2">
+              <Button
+                onClick={() => navigate(-1)}
+                type="submit"
+                variant="outline"
+                className="w-1/2"
+              >
+                <ChevronLeft className="h-4 w-4" />
+                Kembali
+              </Button>
+              <Button type="submit" className="w-1/2">
+                Masuk
+              </Button>
+            </div>
           </Form>
         </CardContent>
       </Card>

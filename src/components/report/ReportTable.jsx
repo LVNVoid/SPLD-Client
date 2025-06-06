@@ -94,16 +94,19 @@ export default function ReportTable({ reports, onSuccess }) {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
-                    <DropdownMenuItem>
-                      <Link to={`/admin/report/${report.id}`}>
-                        Lihat detail
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => handleEditClick(report)}>
+                    <Link to={`/admin/report/${report.id}`}>
+                      <DropdownMenuItem className="cursor-pointer">
+                        Lihat Detail
+                      </DropdownMenuItem>
+                    </Link>
+                    <DropdownMenuItem
+                      className="cursor-pointer"
+                      onClick={() => handleEditClick(report)}
+                    >
                       Ubah Laporan
                     </DropdownMenuItem>
                     <DropdownMenuItem
-                      className="text-red-600 focus:text-red-600"
+                      className="text-red-600 focus:text-red-600 cursor-pointer"
                       onClick={() => handleDeleteClick(report)}
                     >
                       Hapus

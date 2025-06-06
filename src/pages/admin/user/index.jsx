@@ -1,3 +1,4 @@
+import UserTable from "@/components/user/UserTable";
 import React from "react";
 
 const UserPage = () => {
@@ -9,7 +10,7 @@ const UserPage = () => {
           Kelola dan lihat semua pengguna dalam sistem.
         </p>
       </div>
-      {/* TODO : Add User Table */}
+      <UserTable />
     </div>
   );
 };
