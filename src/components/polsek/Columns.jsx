@@ -8,7 +8,7 @@ import {
 } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
 
-export const columns = [
+export const columns = ({ onEdit }) => [
   {
     accessorKey: "name",
     header: "Nama",
@@ -18,11 +18,10 @@ export const columns = [
     header: "Jumlah Pengguna",
     id: "userCount",
   },
-
   {
     id: "actions",
     cell: ({ row }) => {
-      const user = row.original;
+      const polsek = row.original;
 
       return (
         <DropdownMenu>
@@ -34,12 +33,15 @@ export const columns = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(user.id)}
+              onClick={() => navigator.clipboard.writeText(polsek.id)}
             >
               Copy Polsek ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>Lihat detail</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => onEdit?.(polsek)}>
+              Edit
+            </DropdownMenuItem>
             <DropdownMenuItem>Hapus</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
