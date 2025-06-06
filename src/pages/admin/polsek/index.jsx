@@ -1,3 +1,5 @@
+import PolsekTable from "@/components/polsek/PolsekTable";
+
 const PolsekPage = () => {
   return (
     <div className="container mx-auto py-8 px-4">
@@ -7,7 +9,7 @@ const PolsekPage = () => {
           Kelola dan lihat semua polsek dalam sistem.
         </p>
       </div>
-      {/* TODO : Add Polsek Table */}
+      <PolsekTable />
     </div>
   );
 };
