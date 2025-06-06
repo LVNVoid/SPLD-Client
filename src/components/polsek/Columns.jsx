@@ -8,13 +8,13 @@ import {
 } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
 
-export const columns = ({ onEdit }) => [
+export const columns = ({ onEdit, onDelete, onView }) => [
   {
     accessorKey: "name",
     header: "Nama",
   },
   {
-    accessorFn: (row) => row._count.users ?? 0,
+    accessorFn: (row) => row._count?.users ?? 0,
     header: "Jumlah Pengguna",
     id: "userCount",
   },
@@ -38,11 +38,15 @@ export const columns = ({ onEdit }) => [
               Copy Polsek ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Lihat detail</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => onView?.(polsek)}>
+              Lihat detail
+            </DropdownMenuItem>
             <DropdownMenuItem onClick={() => onEdit?.(polsek)}>
               Edit
             </DropdownMenuItem>
-            <DropdownMenuItem>Hapus</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => onDelete?.(polsek)}>
+              Hapus
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

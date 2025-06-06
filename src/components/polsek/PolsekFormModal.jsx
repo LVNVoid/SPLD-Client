@@ -1,7 +1,7 @@
 import useCrud from "@/hooks/useCrud";
-import { Dialog } from "@radix-ui/react-dialog";
 import { useEffect, useState } from "react";
 import {
+  Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
