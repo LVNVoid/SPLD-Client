@@ -15,28 +15,30 @@ export function FilterToolbar({
   authors,
 }) {
   return (
-    <div className="flex flex-col md:flex-row items-center justify-between gap-4 px-2">
-      <Input
-        placeholder="Cari narasi..."
-        className="w-full md:w-1/3"
-        value={search}
-        onChange={(e) => onSearchChange(e.target.value)}
-      />
-
-      {/* Author Filter */}
-      <Select value={authorFilter} onValueChange={onAuthorFilterChange}>
-        <SelectTrigger className="w-full md:w-52">
-          <SelectValue placeholder="Filter Penulis" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="all">Semua Penulis</SelectItem>
-          {authors.map((author) => (
-            <SelectItem key={author} value={author}>
-              {author}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+    <div className="flex  items-center justify-between gap-x-2">
+      <div className="w-full">
+        <Input
+          placeholder="Cari narasi..."
+          className="w-full md:w-64 "
+          value={search}
+          onChange={(e) => onSearchChange(e.target.value)}
+        />
+      </div>
+      <div>
+        <Select value={authorFilter} onValueChange={onAuthorFilterChange}>
+          <SelectTrigger className="w-full md:w-48 ">
+            <SelectValue placeholder="Filter Penulis" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Semua Penulis</SelectItem>
+            {authors.map((author) => (
+              <SelectItem key={author} value={author}>
+                {author}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
     </div>
   );
 }

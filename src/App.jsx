@@ -19,6 +19,7 @@ import PolsekPage from "./pages/admin/polsek";
 import PublicNarrativePage from "./pages/public/narrative";
 import PublicContactPage from "./pages/public/contact";
 import PublicAboutPage from "./pages/public/about";
+import DetailNarrativePage from "./pages/public/narrative/detail";
 
 const router = createBrowserRouter([
   {
@@ -31,7 +32,16 @@ const router = createBrowserRouter([
       },
       {
         path: "narrative",
-        element: <PublicNarrativePage />,
+        children: [
+          {
+            index: true,
+            element: <PublicNarrativePage />,
+          },
+          {
+            path: ":id",
+            element: <DetailNarrativePage />,
+          },
+        ],
       },
       {
         path: "contact",

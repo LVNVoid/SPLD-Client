@@ -82,7 +82,7 @@ export default function PublicNarrativesPage() {
 
   return (
     <div className="w-full p-4 md:p-6 space-y-6">
-      <h1 className="text-2xl font-bold px-2">Daftar Narasi</h1>
+      <h1 className="text-4xl font-bold px-2">Narasi Publik</h1>
 
       <FilterToolbar
         search={search}
