@@ -1,7 +1,8 @@
-import { useState } from "react";
-import useCrud from "@/hooks/useCrud";
-import api from "@/lib/axios";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import api from "@/lib/axios";
+import useCrud from "@/hooks/useCrud";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,24 +10,45 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
+import { ImageIcon, Upload, X, Loader2, Trash2 } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
-import { ImageIcon, Upload, X, Loader2, FileText } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+export default function NarrativeForm({ reportId, initialData }) {
+  const navigate = useNavigate();
+  const isEditMode = Boolean(initialData);
 
-export default function NarrativeForm({ reportId }) {
-  const { createData } = useCrud("/narratives");
+  const { createData, updateData } = useCrud("/narratives");
+
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [status, setStatus] = useState("DRAFT");
+
   const [images, setImages] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
 
-  const navigate = useNavigate();
+  const [existingImages, setExistingImages] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  // Load data jika edit
+  useEffect(() => {
+    if (isEditMode) {
+      setTitle(initialData.title || "");
+      setContent(initialData.content || "");
+      setStatus(initialData.status || "DRAFT");
+      setExistingImages(initialData.images || []);
+    }
+  }, [initialData]);
 
   const handleImageChange = (e) => {
     const files = [...e.target.files];
-    const total = imagePreviews.length + files.length;
+    const total = imagePreviews.length + existingImages.length + files.length;
     if (total > 5) return toast.error("Maksimal 5 gambar");
 
     setImages((prev) => [...prev, ...files]);
@@ -40,33 +62,45 @@ export default function NarrativeForm({ reportId }) {
     setImagePreviews((prev) => [...prev, ...newPreviews]);
   };
 
-  const removeImage = (index) => {
+  const removeNewImage = (index) => {
     URL.revokeObjectURL(imagePreviews[index].url);
     setImagePreviews((prev) => prev.filter((_, i) => i !== index));
     setImages((prev) => prev.filter((_, i) => i !== index));
   };
 
+  const handleDeleteExistingImage = async (imageId) => {
+    setLoading(true);
+    try {
+      await api.delete(`/upload/narrative/image/${imageId}`);
+      toast.success("Gambar dihapus");
+      setExistingImages((prev) => prev.filter((img) => img.id !== imageId));
+    } catch (err) {
+      console.error("Gagal menghapus gambar:", err);
+      toast.error("Gagal menghapus gambar");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const uploadImages = async (narrativeId) => {
+    const formData = new FormData();
+    images.forEach((file) => formData.append("images", file));
+
+    await api.post(`/upload/narrative/${narrativeId}`, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+
+    toast.success("Gambar berhasil diunggah");
+  };
+
   const resetForm = () => {
     setTitle("");
     setContent("");
+    setStatus("DRAFT");
     setImages([]);
     setImagePreviews([]);
+    setExistingImages([]);
     setError(null);
-    setLoading(false);
-  };
-
-  const uploadImages = async (narrativeId, files) => {
-    const formData = new FormData();
-    files.forEach((file) => formData.append("images", file));
-    try {
-      await api.post(`/upload/narrative/${narrativeId}`, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-      toast.success("Gambar berhasil diunggah");
-    } catch (error) {
-      toast.error("Gagal mengunggah gambar");
-      throw new Error(error.response?.data?.message || "Upload gagal");
-    }
   };
 
   const handleSubmit = async (e) => {
@@ -75,22 +109,39 @@ export default function NarrativeForm({ reportId }) {
     setError(null);
 
     try {
-      if (!reportId) throw new Error("Report ID tidak tersedia.");
+      if (!reportId && !isEditMode) throw new Error("Report ID tidak tersedia");
 
-      const created = await createData({
-        title,
-        content,
-        reportId,
-        images: [],
-      });
+      let narrativeId = initialData?.id;
+      let result;
 
-      if (images.length > 0) {
-        await uploadImages(created.id, images);
+      if (isEditMode) {
+        result = await updateData(narrativeId, {
+          title,
+          content,
+          status,
+        });
+      } else {
+        result = await createData({
+          title,
+          content,
+          status,
+          reportId,
+          images: [],
+        });
+        narrativeId = result.id;
       }
 
-      toast.success("Narasi berhasil ditambahkan");
+      if (images.length > 0) {
+        await uploadImages(narrativeId);
+      }
+
+      toast.success(
+        isEditMode
+          ? "Narasi berhasil diperbarui"
+          : "Narasi berhasil ditambahkan"
+      );
       resetForm();
-      navigate(-1); // kembali ke halaman sebelumnya
+      navigate(-1);
     } catch (err) {
       setError(err.message || "Terjadi kesalahan");
     } finally {
@@ -124,10 +175,23 @@ export default function NarrativeForm({ reportId }) {
           />
         </div>
 
+        <div className="space-y-2">
+          <Label>Status</Label>
+          <Select value={status} onValueChange={setStatus}>
+            <SelectTrigger>
+              <SelectValue placeholder="Pilih status..." />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="DRAFT">Draft</SelectItem>
+              <SelectItem value="PUBLISHED">Publikasi</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
         <div className="space-y-3">
           <Label className="flex items-center gap-2">
             <ImageIcon className="h-4 w-4" />
-            Gambar Pendukung <Badge variant="secondary">Maks 5</Badge>
+            Dokumentasi <Badge variant="secondary">Maks 5</Badge>
           </Label>
 
           <div className="border-2 border-dashed rounded-lg p-4 text-center">
@@ -153,6 +217,36 @@ export default function NarrativeForm({ reportId }) {
             />
           </div>
 
+          {existingImages.length > 0 && (
+            <div className="grid grid-cols-3 gap-2">
+              {existingImages.map((img) => (
+                <div key={img.id} className="relative group">
+                  <div className="aspect-square rounded-lg overflow-hidden border">
+                    <img
+                      src={img.url}
+                      alt={img.alt || "Gambar"}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <Button
+                    type="button"
+                    size="sm"
+                    disabled={loading}
+                    variant="destructive"
+                    className="absolute -top-1 -right-1 h-5 w-5 rounded-full p-0 opacity-0 group-hover:opacity-100 cursor-pointer"
+                    onClick={() => handleDeleteExistingImage(img.id)}
+                  >
+                    {loading ? (
+                      <Loader2 className="h-3 w-3 animate-spin" />
+                    ) : (
+                      <Trash2 className="h-3 w-3" />
+                    )}
+                  </Button>
+                </div>
+              ))}
+            </div>
+          )}
+
           {imagePreviews.length > 0 && (
             <div className="grid grid-cols-3 gap-2">
               {imagePreviews.map((preview, index) => (
@@ -169,13 +263,10 @@ export default function NarrativeForm({ reportId }) {
                     size="sm"
                     variant="destructive"
                     className="absolute -top-1 -right-1 h-5 w-5 rounded-full p-0 opacity-0 group-hover:opacity-100"
-                    onClick={() => removeImage(index)}
+                    onClick={() => removeNewImage(index)}
                   >
                     <X className="h-3 w-3" />
                   </Button>
-                  <p className="text-xs mt-1 truncate text-center">
-                    {preview.name}
-                  </p>
                 </div>
               ))}
             </div>
@@ -202,12 +293,12 @@ export default function NarrativeForm({ reportId }) {
             {loading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Mengirim...
+                Menyimpan...
               </>
             ) : (
               <>
                 <Upload className="mr-2 h-4 w-4" />
-                Tambah Narasi
+                {isEditMode ? "Simpan Perubahan" : "Tambah Narasi"}
               </>
             )}
           </Button>

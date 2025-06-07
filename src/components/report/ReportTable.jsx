@@ -20,6 +20,7 @@ import { useState } from "react";
 import useCrud from "@/hooks/useCrud";
 import DeleteModal from "../ui/delete-modal";
 import ReportFormModal from "./ReportFormModal";
+import toast from "react-hot-toast";
 
 export default function ReportTable({ reports, onSuccess }) {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -44,6 +45,7 @@ export default function ReportTable({ reports, onSuccess }) {
       setDeleteModalOpen(false);
     } catch (error) {
       console.error("Gagal menghapus laporan:", error);
+      toast.error("Gagal menghapus laporan");
     }
   };
 

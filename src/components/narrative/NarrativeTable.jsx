@@ -97,16 +97,18 @@ export default function NarrativeTable({ narratives, onDeleteSuccess }) {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
-                    <DropdownMenuItem>
-                      <Link to={`/admin/narrative/${narrative.id}`}>
+                    <Link to={`/admin/narrative/${narrative.id}`}>
+                      <DropdownMenuItem className="cursor-pointer">
                         Lihat detail
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => {}}>
-                      Ubah Narasi
-                    </DropdownMenuItem>
+                      </DropdownMenuItem>
+                    </Link>
+                    <Link to={`/admin/narrative/edit/${narrative.id}`}>
+                      <DropdownMenuItem className="cursor-pointer">
+                        Ubah Narasi
+                      </DropdownMenuItem>
+                    </Link>
                     <DropdownMenuItem
-                      className="text-red-600 focus:text-red-600"
+                      className="text-destructive cursor-pointer"
                       onClick={() => handleDeleteClick(narrative)}
                     >
                       Hapus
@@ -127,13 +129,6 @@ export default function NarrativeTable({ narratives, onDeleteSuccess }) {
         title="Hapus Narasi"
         description={`Anda akan menghapus narasi "${selectedNarrative?.title}". Tindakan ini tidak dapat dibatalkan.`}
       />
-      {/* 
-      <NarrativeFormModal
-        open={editModalOpen}
-        onOpenChange={setEditModalOpen}
-        narrativeData={selectedNarrative}
-        onSuccess={onSuccess}
-      /> */}
     </>
   );
 }

@@ -63,7 +63,7 @@ export default function ReportPage() {
         ) : (
           <ReportTable
             reports={filteredReports}
-            onDeleteSuccess={handleDeleteSuccess}
+            onSuccess={handleDeleteSuccess}
           />
         )}
       </div>

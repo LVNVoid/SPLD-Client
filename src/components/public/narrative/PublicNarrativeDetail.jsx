@@ -2,10 +2,10 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { formatDate } from "date-fns";
 import React, { useState, useEffect } from "react";
+import { formatDate } from "@/lib/utils";
 
-const NarrativeDetail = ({ narrative }) => {
+const PublicNarrativeDetail = ({ narrative }) => {
   const { title, content, publishedAt, images, author } = narrative;
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -44,8 +44,8 @@ const NarrativeDetail = ({ narrative }) => {
             </AvatarFallback>
           </Avatar>
           <span>{author.name}</span>
-          <span> |</span>
-          <span>{formatDate(new Date(publishedAt), "dd MMMM yyyy")}</span>
+          <span>|</span>
+          <span>{formatDate(new Date(publishedAt))}</span>
         </div>
       </div>
 
@@ -122,4 +122,4 @@ const NarrativeDetail = ({ narrative }) => {
   );
 };
 
-export default NarrativeDetail;
+export default PublicNarrativeDetail;

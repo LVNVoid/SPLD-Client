@@ -1,4 +1,4 @@
-import PublicNarrativeDetail from "@/components/public/narrative/PublicNarrativeDetail";
+import NarrativeDetail from "@/components/narrative/NarrativeDetail";
 import { ChevronLeft } from "lucide-react";
 import React from "react";
 import { Link } from "react-router-dom";
@@ -35,18 +35,23 @@ const narrative = {
   },
 };
 
-const PublicDetailNarrativePage = () => {
+const DetailNarrativePage = () => {
   return (
-    <div className="px-4 py-8 bg-background">
-      <Link to="/narrative" className="flex items-center gap-2 text-primary">
-        <ChevronLeft className="w-6 h-6 text-primary" />
-        <span className="text-primary">Kembali ke Daftar Narasi</span>
-      </Link>
-      <div className="max-w-6xl mx-auto px-4 py-8">
-        <PublicNarrativeDetail narrative={narrative} />
+    <div className="px-4 bg-background">
+      <div className="max-w-6xl mx-auto px-4 py-4">
+        <Link
+          to="/admin/narrative"
+          className="flex items-center gap-2 text-primary"
+        >
+          <ChevronLeft className="w-4 h-4 md:w-6 md:h-6 text-primary " />
+          <span className="text-primary text-sm md:text-md font-semibold">
+            Kembali ke Daftar Narasi
+          </span>
+        </Link>
+        <NarrativeDetail narrative={narrative} />
       </div>
     </div>
   );
 };
 
-export default PublicDetailNarrativePage;
+export default DetailNarrativePage;
