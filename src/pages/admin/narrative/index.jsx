@@ -15,11 +15,6 @@ const NarrativePage = () => {
     refreshData,
   } = useCrud("/narratives");
 
-  // const handleSuccess = () => {
-  //   refreshData();
-  //   toast.success("Data narasi berhasil disimpan");
-  // };
-
   const filteredNarratives = narratives.filter((narrative) => {
     const matchesSearch =
       narrative.title.toLowerCase().includes(searchQuery.toLowerCase()) ||

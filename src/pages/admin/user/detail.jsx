@@ -61,7 +61,7 @@ export default function DetailUserPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Profile */}
         <div className="lg:col-span-2">
-          <Card>
+          <Card className="bg-background">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <User className="h-5 w-5" />
@@ -72,7 +72,7 @@ export default function DetailUserPage() {
               <div className="flex items-center gap-4">
                 <Avatar className="h-16 w-16">
                   <AvatarImage src={userData.avatarUrl} alt={userData.name} />
-                  <AvatarFallback className="bg-primary text-primary-foreground">
+                  <AvatarFallback className="bg-primary font-semibold text-primary-foreground">
                     {toCapitalize(userData.name).charAt(0)}
                     {toCapitalize(userData.name).split(" ")[1]?.charAt(0)}
                   </AvatarFallback>
@@ -132,7 +132,7 @@ export default function DetailUserPage() {
 
         {/* Side Information */}
         <div className="space-y-6">
-          <Card>
+          <Card className="bg-background">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Building className="h-5 w-5" />
@@ -151,7 +151,7 @@ export default function DetailUserPage() {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="bg-background">
             <CardHeader>
               <CardTitle>Aksi Cepat</CardTitle>
             </CardHeader>

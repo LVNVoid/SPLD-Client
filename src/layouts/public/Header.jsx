@@ -1,9 +1,18 @@
+import { useLocation, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import MobileNav from "./MobileNav";
 import { Moon, Sun } from "lucide-react";
-import { Link } from "react-router-dom";
 
 const Header = ({ theme, setTheme, isMounted }) => {
+  const location = useLocation();
+
+  const navItems = [
+    { name: "Beranda", to: "/" },
+    { name: "Narasi", to: "/narrative" },
+    { name: "Tentang Kami", to: "/about-us" },
+    { name: "Kontak", to: "/contact" },
+  ];
+
   return (
     <header className="border-b">
       <div className="px-4 py-4 flex items-center justify-between">
@@ -15,30 +24,19 @@ const Header = ({ theme, setTheme, isMounted }) => {
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center space-x-6">
-          <Link
-            to="/"
-            className="text-sm font-medium hover:text-primary transition-colors"
-          >
-            Beranda
-          </Link>
-          <Link
-            to="/narrative"
-            className="text-sm font-medium hover:text-primary transition-colors"
-          >
-            Narasi
-          </Link>
-          <Link
-            to="/about-us"
-            className="text-sm font-medium hover:text-primary transition-colors"
-          >
-            Tentang Kami
-          </Link>
-          <Link
-            to="/contact"
-            className="text-sm font-medium hover:text-primary transition-colors"
-          >
-            Kontak
-          </Link>
+          {navItems.map((item) => (
+            <Link
+              key={item.to}
+              to={item.to}
+              className={`text-sm font-medium transition-colors ${
+                location.pathname === item.to
+                  ? "text-primary font-semibold"
+                  : "text-muted-foreground hover:text-primary"
+              }`}
+            >
+              {item.name}
+            </Link>
+          ))}
         </nav>
 
         <div className="flex items-center space-x-4">
@@ -62,7 +60,7 @@ const Header = ({ theme, setTheme, isMounted }) => {
             </Button>
           )}
           <Button asChild className="hidden md:inline-flex">
-            <Link to={"/login"}>Masuk </Link>
+            <Link to="/login">Masuk</Link>
           </Button>
           <MobileNav />
         </div>

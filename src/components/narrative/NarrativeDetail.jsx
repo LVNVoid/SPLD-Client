@@ -6,7 +6,7 @@ import React, { useState, useEffect } from "react";
 import { formatDate } from "@/lib/utils";
 
 const NarrativeDetail = ({ narrative }) => {
-  const { title, content, publishedAt, images, author } = narrative;
+  const { title, content, publishedAt, images = [], author } = narrative;
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
@@ -40,16 +40,16 @@ const NarrativeDetail = ({ narrative }) => {
         <div className="flex items-center gap-3 text-sm pt-2">
           <Avatar className="w-8 h-8">
             <AvatarFallback>
-              {author.name.slice(0, 2).toUpperCase()}
+              {author?.name?.slice(0, 2).toUpperCase()}
             </AvatarFallback>
           </Avatar>
-          <span>{author.name}</span>
+          <span>{author?.name}</span>
           <span>|</span>
           <span>{formatDate(new Date(publishedAt))}</span>
         </div>
       </div>
 
-      {/* Image Carousel Section */}
+      {/* Image Carousel */}
       {images.length > 0 ? (
         <div className="relative w-full h-96 md:h-[500px] overflow-hidden rounded-sm">
           <img
@@ -58,7 +58,6 @@ const NarrativeDetail = ({ narrative }) => {
             className="w-full h-full object-cover transition-all duration-300"
           />
 
-          {/* Navigation Arrows - Only show if more than 1 image */}
           {images.length > 1 && (
             <>
               <Button
@@ -81,14 +80,13 @@ const NarrativeDetail = ({ narrative }) => {
             </>
           )}
 
-          {/* Image Counter */}
           {images.length > 1 && (
             <div className="absolute top-4 right-4 bg-black/50 text-white px-3 py-1 rounded-full text-sm">
               {currentIndex + 1} / {images.length}
             </div>
           )}
 
-          {images.length > 1 && images.length <= 5 && (
+          {images.length <= 5 && images.length > 1 && (
             <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
               <div className="flex gap-2">
                 {images.map((_, index) => (
@@ -114,7 +112,7 @@ const NarrativeDetail = ({ narrative }) => {
         </Card>
       )}
 
-      {/* Content Section */}
+      {/* Content */}
       <div className="prose max-w-none prose-lg">
         <div dangerouslySetInnerHTML={{ __html: content }} />
       </div>
