@@ -4,14 +4,23 @@ import UserFormModal from "@/components/user/UserFormModal";
 import UserTable from "@/components/user/UserTable";
 import useCrud from "@/hooks/useCrud";
 import { Search } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
 
 const UserPage = () => {
-  const { refreshData } = useCrud("/polseks");
+  const [searchQuery, setSearchQuery] = useState("");
+  const { data, loading, error, refreshData } = useCrud("/users");
 
   const handleSuccess = () => {
     refreshData();
   };
+
+  const filteredReports = data.filter((data) => {
+    const matchesSearch = data.name
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
+
+    return matchesSearch;
+  });
 
   return (
     <div className="container mx-auto py-8 px-4">
@@ -26,10 +35,8 @@ const UserPage = () => {
             <Input
               placeholder="Cari Nama Pengguna..."
               className="pl-8"
-              value={() => {}}
-              onChange={() => {
-                console.log("test");
-              }}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
           <UserFormModal
@@ -38,7 +45,12 @@ const UserPage = () => {
           />
         </div>
       </div>
-      <UserTable />
+      <UserTable
+        data={filteredReports}
+        loading={loading}
+        error={error}
+        onSuccess={handleSuccess}
+      />
     </div>
   );
 };

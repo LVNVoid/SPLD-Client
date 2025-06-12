@@ -8,7 +8,7 @@ import {
 } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
 
-export const columns = [
+export const columns = ({ onEdit, onDelete, onView }) => [
   {
     accessorKey: "name",
     header: "Nama",
@@ -46,8 +46,15 @@ export const columns = [
               Copy user ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Lihat detail</DropdownMenuItem>
-            <DropdownMenuItem>Hapus</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => onView?.(user)}>
+              Lihat detail
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => onEdit?.(user)}>
+              Edit
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => onDelete?.(user)}>
+              Hapus
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

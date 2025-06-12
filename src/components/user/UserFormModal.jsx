@@ -25,8 +25,15 @@ import toast from "react-hot-toast";
 import { Button } from "../ui/button";
 import api from "@/lib/axios";
 
-const UserFormModal = ({ trigger, onSuccess }) => {
-  const { createData, createLoading, error } = useCrud("/users");
+const UserFormModal = ({
+  trigger,
+  onSuccess,
+  userData = null,
+  open,
+  onOpenChange,
+}) => {
+  const { createData, updateData, createLoading, updateLoading, error } =
+    useCrud("/users");
 
   const [isOpen, setIsOpen] = useState(false);
   const [formData, setFormData] = useState({
@@ -38,6 +45,25 @@ const UserFormModal = ({ trigger, onSuccess }) => {
   });
   const [polseks, setPolseks] = useState([]);
   const [polsekLoading, setPolsekLoading] = useState(false);
+
+  const modalOpen = open !== undefined ? open : isOpen;
+  const setModalOpen = onOpenChange || setIsOpen;
+
+  useEffect(() => {
+    if (modalOpen) {
+      if (userData) {
+        setFormData({
+          name: userData.name || "",
+          email: userData.email || "",
+          password: "",
+          role: userData.role || "",
+          polsekId: userData.polsekId ? String(userData.polsekId) : "",
+        });
+      } else {
+        resetForm();
+      }
+    }
+  }, [modalOpen, userData]);
 
   useEffect(() => {
     const fetchPolseks = async () => {
@@ -89,7 +115,10 @@ const UserFormModal = ({ trigger, onSuccess }) => {
     const validations = [
       { condition: !formData.name.trim(), message: "Nama harus diisi" },
       { condition: !formData.email.trim(), message: "Email harus diisi" },
-      { condition: !formData.password.trim(), message: "Password harus diisi" },
+      {
+        condition: !userData && !formData.password.trim(),
+        message: "Password harus diisi",
+      },
       { condition: !formData.role, message: "Role harus dipilih" },
       {
         condition: formData.role === "POLSEK" && !formData.polsekId,
@@ -108,50 +137,51 @@ const UserFormModal = ({ trigger, onSuccess }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!validateForm()) return;
 
     const payload = {
       name: formData.name.trim(),
       email: formData.email.trim(),
-      password: formData.password,
       role: formData.role,
     };
 
-    if (formData.role === "POLSEK") {
-      payload.polsekId = formData.polsekId;
-    }
+    if (!userData) payload.password = formData.password;
+    if (formData.role === "POLSEK") payload.polsekId = formData.polsekId;
 
     try {
-      await createData(payload);
-      toast.success("Pengguna berhasil ditambahkan");
+      if (userData) {
+        await updateData(userData.id, payload);
+        toast.success("Pengguna berhasil diperbarui");
+      } else {
+        await createData(payload);
+        toast.success("Pengguna berhasil ditambahkan");
+      }
+
       resetForm();
-      setIsOpen(false);
+      setModalOpen(false);
       onSuccess?.();
     } catch (err) {
       const msg =
         err.response?.data?.message ||
         err.response?.data?.error ||
         err.message ||
-        "Gagal menambahkan pengguna";
+        "Gagal memproses pengguna";
       toast.error(msg);
     }
   };
 
   const handleCancel = () => {
     resetForm();
-    setIsOpen(false);
+    setModalOpen(false);
   };
 
   const renderPolsekSelect = () => (
-    <div>
-      <Label htmlFor="polsekId">
-        Pilih Polsek <span className="text-red-500">*</span>
-      </Label>
+    <div className="space-y-2">
+      <Label htmlFor="polsekId">Pilih Polsek</Label>
       <Select
         value={formData.polsekId}
         onValueChange={handlePolsekChange}
-        disabled={createLoading || polsekLoading}
+        disabled={createLoading || updateLoading || polsekLoading}
       >
         <SelectTrigger className="w-full">
           <SelectValue
@@ -184,38 +214,36 @@ const UserFormModal = ({ trigger, onSuccess }) => {
   );
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog open={modalOpen} onOpenChange={setModalOpen}>
       {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <User2 className="h-5 w-5" />
-            Tambah Pengguna
+            {userData ? "Edit Pengguna" : "Tambah Pengguna"}
           </DialogTitle>
           <DialogDescription>
-            Masukkan data pengguna yang ingin ditambahkan.
+            {userData
+              ? "Perbarui informasi pengguna."
+              : "Masukkan data pengguna yang ingin ditambahkan."}
           </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          <div>
-            <Label htmlFor="name">
-              Nama <span className="text-red-500">*</span>
-            </Label>
+          <div className="space-y-2">
+            <Label htmlFor="name">Nama</Label>
             <Input
               id="name"
               value={formData.name}
               onChange={handleChange}
               placeholder="Masukkan nama lengkap"
               required
-              disabled={createLoading}
+              disabled={createLoading || updateLoading}
             />
           </div>
 
-          <div>
-            <Label htmlFor="email">
-              Email <span className="text-red-500">*</span>
-            </Label>
+          <div className="space-y-2">
+            <Label htmlFor="email">Email</Label>
             <Input
               id="email"
               type="email"
@@ -223,34 +251,32 @@ const UserFormModal = ({ trigger, onSuccess }) => {
               onChange={handleChange}
               placeholder="contoh@email.com"
               required
-              disabled={createLoading}
+              disabled={createLoading || updateLoading}
             />
           </div>
 
-          <div>
-            <Label htmlFor="password">
-              Password <span className="text-red-500">*</span>
-            </Label>
-            <Input
-              id="password"
-              type="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="Masukkan password"
-              required
-              disabled={createLoading}
-              minLength={6}
-            />
-          </div>
+          {!userData && (
+            <div className="space-y-2">
+              <Label htmlFor="password">Password</Label>
+              <Input
+                id="password"
+                type="password"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="Masukkan password"
+                required
+                disabled={createLoading || updateLoading}
+                minLength={6}
+              />
+            </div>
+          )}
 
-          <div>
-            <Label htmlFor="role">
-              Role <span className="text-red-500">*</span>
-            </Label>
+          <div className="space-y-2">
+            <Label htmlFor="role">Role</Label>
             <Select
               value={formData.role}
               onValueChange={handleRoleChange}
-              disabled={createLoading}
+              disabled={createLoading || updateLoading}
             >
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Pilih Role" />
@@ -278,12 +304,12 @@ const UserFormModal = ({ trigger, onSuccess }) => {
               type="button"
               variant="outline"
               onClick={handleCancel}
-              disabled={createLoading}
+              disabled={createLoading || updateLoading}
             >
               Batal
             </Button>
-            <Button type="submit" disabled={createLoading}>
-              {createLoading && (
+            <Button type="submit" disabled={createLoading || updateLoading}>
+              {(createLoading || updateLoading) && (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               )}
               Simpan
