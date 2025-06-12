@@ -22,6 +22,7 @@ import PublicAboutPage from "./pages/public/about";
 import PublicDetailNarrativePage from "./pages/public/narrative/detail";
 import DetailNarrativePage from "./pages/admin/narrative/detail";
 import EditNarrativePage from "./pages/admin/narrative/edit";
+import DetailUserPage from "./pages/admin/user/detail";
 
 const router = createBrowserRouter([
   {
@@ -86,7 +87,13 @@ const router = createBrowserRouter([
           },
           { path: "profile", element: <ProfilePage /> },
           { path: "polsek", element: <PolsekPage /> },
-          { path: "user", element: <UserPage /> },
+          {
+            path: "user",
+            children: [
+              { index: true, element: <UserPage /> },
+              { path: ":id", element: <DetailUserPage /> },
+            ],
+          },
           {
             path: "report",
             children: [

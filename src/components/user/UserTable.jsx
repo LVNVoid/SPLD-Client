@@ -5,10 +5,11 @@ import { DataTable } from "./DataTable";
 import toast from "react-hot-toast";
 import useCrud from "@/hooks/useCrud";
 import UserFormModal from "./UserFormModal";
+import { useNavigate } from "react-router-dom";
 
 const UserTable = (props) => {
   const { data, loading, error, onSuccess } = props;
-
+  const navigate = useNavigate();
   const [deleteUser, setDeleteUser] = useState(null);
   const [editUser, setEditUser] = useState(null);
 
@@ -33,7 +34,7 @@ const UserTable = (props) => {
       setEditUser(item);
       setModalOpen(true);
     },
-    // onView: (item) => setViewPolsek(item),
+    onView: (item) => navigate(`/admin/user/${item.id}`),
     onDelete: (item) => setDeleteUser(item),
   });
 
