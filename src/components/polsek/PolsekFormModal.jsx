@@ -45,7 +45,7 @@ const PolsekFormModal = (props) => {
         await updateData(polsekData.id, { name });
         toast.success("Polsek berhasil diperbarui");
       } else {
-        await createData({ name }); // <- fix disini
+        await createData({ name });
         toast.success("Polsek berhasil ditambahkan");
       }
 

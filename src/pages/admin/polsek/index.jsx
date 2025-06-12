@@ -21,6 +21,7 @@ const PolsekPage = () => {
 
     return matchesSearch;
   });
+
   return (
     <div className="container mx-auto py-8 px-4">
       <div className="mb-4">
