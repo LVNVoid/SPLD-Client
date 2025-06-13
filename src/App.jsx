@@ -23,6 +23,7 @@ import PublicDetailNarrativePage from "./pages/public/narrative/detail";
 import DetailNarrativePage from "./pages/admin/narrative/detail";
 import EditNarrativePage from "./pages/admin/narrative/edit";
 import DetailUserPage from "./pages/admin/user/detail";
+import Unauthorized from "./pages/error/Unauthorized";
 
 const router = createBrowserRouter([
   {
@@ -76,22 +77,32 @@ const router = createBrowserRouter([
                 element: <DetailNarrativePage />,
               },
               {
-                path: "add/:id",
-                element: <CreateNarrativePage />,
-              },
-              {
-                path: "edit/:id",
-                element: <EditNarrativePage />,
+                element: <PrivateRoute allowedRoles={["ADMIN", "HUMAS"]} />,
+                children: [
+                  {
+                    path: "add/:id",
+                    element: <CreateNarrativePage />,
+                  },
+                  {
+                    path: "edit/:id",
+                    element: <EditNarrativePage />,
+                  },
+                ],
               },
             ],
           },
           { path: "profile", element: <ProfilePage /> },
-          { path: "polsek", element: <PolsekPage /> },
           {
-            path: "user",
+            element: <PrivateRoute allowedRoles={["ADMIN"]} />,
             children: [
-              { index: true, element: <UserPage /> },
-              { path: ":id", element: <DetailUserPage /> },
+              { path: "polsek", element: <PolsekPage /> },
+              {
+                path: "user",
+                children: [
+                  { index: true, element: <UserPage /> },
+                  { path: ":id", element: <DetailUserPage /> },
+                ],
+              },
             ],
           },
           {
@@ -115,6 +126,10 @@ const router = createBrowserRouter([
         action: LoginAction(store),
       },
     ],
+  },
+  {
+    path: "/unauthorized",
+    element: <Unauthorized />,
   },
 ]);
 

@@ -20,7 +20,11 @@ import { useState } from "react";
 import useCrud from "@/hooks/useCrud";
 import DeleteModal from "../ui/delete-modal";
 
-export default function NarrativeTable({ narratives, onDeleteSuccess }) {
+export default function NarrativeTable({
+  narratives,
+  onDeleteSuccess,
+  isHumas,
+}) {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   //   const [editModalOpen, setEditModalOpen] = useState(false);
   const [selectedNarrative, setSelectedNarrative] = useState(null);
@@ -102,17 +106,22 @@ export default function NarrativeTable({ narratives, onDeleteSuccess }) {
                         Lihat detail
                       </DropdownMenuItem>
                     </Link>
-                    <Link to={`/admin/narrative/edit/${narrative.id}`}>
-                      <DropdownMenuItem className="cursor-pointer">
-                        Ubah Narasi
-                      </DropdownMenuItem>
-                    </Link>
-                    <DropdownMenuItem
-                      className="text-destructive cursor-pointer"
-                      onClick={() => handleDeleteClick(narrative)}
-                    >
-                      Hapus
-                    </DropdownMenuItem>
+                    {/* Only humas and admin can edit or delete */}
+                    {isHumas && (
+                      <>
+                        <Link to={`/admin/narrative/edit/${narrative.id}`}>
+                          <DropdownMenuItem className="cursor-pointer">
+                            Ubah Narasi
+                          </DropdownMenuItem>
+                        </Link>
+                        <DropdownMenuItem
+                          className="text-destructive cursor-pointer"
+                          onClick={() => handleDeleteClick(narrative)}
+                        >
+                          Hapus
+                        </DropdownMenuItem>
+                      </>
+                    )}
                   </DropdownMenuContent>
                 </DropdownMenu>
               </TableCell>

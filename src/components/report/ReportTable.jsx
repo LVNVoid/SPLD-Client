@@ -22,7 +22,7 @@ import DeleteModal from "../ui/delete-modal";
 import ReportFormModal from "./ReportFormModal";
 import toast from "react-hot-toast";
 
-export default function ReportTable({ reports, onSuccess }) {
+export default function ReportTable({ reports, onSuccess, isPolsek }) {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [selectedReport, setSelectedReport] = useState(null);
@@ -101,18 +101,22 @@ export default function ReportTable({ reports, onSuccess }) {
                         Lihat Detail
                       </DropdownMenuItem>
                     </Link>
-                    <DropdownMenuItem
-                      className="cursor-pointer"
-                      onClick={() => handleEditClick(report)}
-                    >
-                      Ubah Laporan
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      className="text-red-600 focus:text-red-600 cursor-pointer"
-                      onClick={() => handleDeleteClick(report)}
-                    >
-                      Hapus
-                    </DropdownMenuItem>
+                    {isPolsek && (
+                      <>
+                        <DropdownMenuItem
+                          className="cursor-pointer"
+                          onClick={() => handleEditClick(report)}
+                        >
+                          Ubah Laporan
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          className="text-red-600 focus:text-red-600 cursor-pointer"
+                          onClick={() => handleDeleteClick(report)}
+                        >
+                          Hapus
+                        </DropdownMenuItem>
+                      </>
+                    )}
                   </DropdownMenuContent>
                 </DropdownMenu>
               </TableCell>

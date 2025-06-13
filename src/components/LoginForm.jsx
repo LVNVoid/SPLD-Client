@@ -49,7 +49,7 @@ export function LoginForm({ className, ...props }) {
             </div>
             <div className="flex w-full justify-end space-x-2">
               <Button
-                onClick={() => navigate(-1)}
+                onClick={() => navigate("/")}
                 type="submit"
                 variant="outline"
                 className="w-1/2"

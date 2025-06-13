@@ -22,6 +22,8 @@ const AdminLayout = () => {
   const [isMounted, setIsMounted] = useState(false);
   const { user } = useSelector((state) => state.userState);
 
+  const isAdmin = user && user.role === "ADMIN";
+
   useEffect(() => {
     setIsMounted(true);
   }, []);
@@ -48,16 +50,20 @@ const AdminLayout = () => {
       path: "/admin/report",
       icon: <FileText className="w-5 h-5" />,
     },
-    {
-      name: "Data Polsek",
-      path: "/admin/polsek",
-      icon: <Building className="w-5 h-5" />,
-    },
-    {
-      name: "Data Pengguna",
-      path: "/admin/user",
-      icon: <Users className="w-5 h-5" />,
-    },
+    ...(isAdmin
+      ? [
+          {
+            name: "Data Polsek",
+            path: "/admin/polsek",
+            icon: <Building className="w-5 h-5" />,
+          },
+          {
+            name: "Data Pengguna",
+            path: "/admin/user",
+            icon: <Users className="w-5 h-5" />,
+          },
+        ]
+      : []),
   ];
 
   const isActive = (path) => {

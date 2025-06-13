@@ -5,8 +5,13 @@ import useCrud from "@/hooks/useCrud";
 import { Search } from "lucide-react";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
 
 const NarrativePage = () => {
+  const { user } = useSelector((state) => state.userState);
+
+  const isHumas = user?.role === "HUMAS" || user?.role === "ADMIN";
+
   const [searchQuery, setSearchQuery] = useState("");
   const {
     data: narratives,
@@ -59,6 +64,7 @@ const NarrativePage = () => {
           <NarrativeTable
             onDeleteSuccess={handleDeleteSuccess}
             narratives={filteredNarratives}
+            isHumas={isHumas}
           />
         )}
       </div>

@@ -22,10 +22,15 @@ import {
 } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 import ReportDetailSkeleton from "@/components/report/ReportDetailSkeleton";
+import { useSelector } from "react-redux";
 
 export default function DetailReportPage() {
   const { id: reportId } = useParams();
   const navigate = useNavigate();
+
+  const { user } = useSelector((state) => state.userState);
+
+  const isHumas = user?.role === "HUMAS" || user?.role === "ADMIN";
 
   const { getData, detailLoading, error, clearError } = useCrud("/reports", {
     autoFetch: false,
@@ -157,13 +162,15 @@ export default function DetailReportPage() {
             <Share2 className="mr-2 h-4 w-4" />
             Bagikan
           </Button>
-          <Button
-            onClick={() => navigate(`/admin/narrative/add/${reportId}`)}
-            size="sm"
-          >
-            <PlusCircle className="mr-2 h4 w-4" />
-            Buat Narasi
-          </Button>
+          {isHumas && (
+            <Button
+              onClick={() => navigate(`/admin/narrative/add/${reportId}`)}
+              size="sm"
+            >
+              <PlusCircle className="mr-2 h4 w-4" />
+              Buat Narasi
+            </Button>
+          )}
         </div>
       </div>
 

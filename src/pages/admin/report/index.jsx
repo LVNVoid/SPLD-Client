@@ -7,8 +7,12 @@ import ReportTable from "@/components/report/ReportTable";
 import ReportFormModal from "@/components/report/ReportFormModal";
 import toast from "react-hot-toast";
 import ReportTableSkeleton from "@/components/report/ReportTableSkeleton";
+import { useSelector } from "react-redux";
 
 export default function ReportPage() {
+  const { user } = useSelector((state) => state.userState);
+  const isPolsek = user?.role === "POLSEK" || user?.role === "ADMIN";
+
   const [searchQuery, setSearchQuery] = useState("");
   const { data: reports, loading, error, refreshData } = useCrud("/reports");
 
@@ -48,10 +52,12 @@ export default function ReportPage() {
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
-        <ReportFormModal
-          trigger={<Button>Tambah Laporan</Button>}
-          onSuccess={handleSuccess}
-        />
+        {isPolsek && (
+          <ReportFormModal
+            trigger={<Button>Tambah Laporan</Button>}
+            onSuccess={handleSuccess}
+          />
+        )}
       </div>
 
       <div className="rounded-md border">
@@ -64,6 +70,7 @@ export default function ReportPage() {
           <ReportTable
             reports={filteredReports}
             onSuccess={handleDeleteSuccess}
+            isPolsek={isPolsek}
           />
         )}
       </div>

@@ -60,13 +60,6 @@ export function NavDropdown({ user, handleLogout }) {
             Profile
           </Link>
         </DropdownMenuItem>
-        <DropdownMenuItem asChild className="flex items-center gap-2 py-2">
-          <Link to="/admin/settings" className="cursor-pointer">
-            <Settings className="h-4 w-4 mr-2" />
-            Settings
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
         <DropdownMenuItem
           className="text-destructive focus:text-destructive cursor-pointer py-2"
           onClick={handleLogout}
