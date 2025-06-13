@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://spld-client.vercel.app/api",
+  baseURL: "https://spld-server.vercel.app/api",
   headers: {
     "Content-Type": "application/json",
   },
