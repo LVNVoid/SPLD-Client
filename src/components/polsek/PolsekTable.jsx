@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { DataTable } from "./DataTable";
 import PolsekFormModal from "./PolsekFormModal";
-import { columns as baseColumns } from "./columns";
+import { columns as baseColumns } from "./Columns";
 import useCrud from "@/hooks/useCrud";
 import toast from "react-hot-toast";
 import DeleteModal from "../ui/delete-modal";
