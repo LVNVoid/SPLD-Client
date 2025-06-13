@@ -2,8 +2,8 @@ import React, { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import useCrud from "@/hooks/useCrud";
 import { NarrativeList } from "@/components/public/narrative/NarrativeList";
-import { FilterToolbar } from "@/components/public/narrative/FilterToolbar";
 import { Pagination } from "@/components/public/narrative/Pagination";
+import { FilterToolbar } from "@/components/FIlterToolbar";
 
 const ITEMS_PER_PAGE = 5;
 
