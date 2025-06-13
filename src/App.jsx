@@ -24,6 +24,7 @@ import DetailNarrativePage from "./pages/admin/narrative/detail";
 import EditNarrativePage from "./pages/admin/narrative/edit";
 import DetailUserPage from "./pages/admin/user/detail";
 import Unauthorized from "./pages/error/Unauthorized";
+import NotFound from "./pages/error/NotFound";
 
 const router = createBrowserRouter([
   {
@@ -130,6 +131,10 @@ const router = createBrowserRouter([
   {
     path: "/unauthorized",
     element: <Unauthorized />,
+  },
+  {
+    path: "*",
+    element: <NotFound />,
   },
 ]);
 

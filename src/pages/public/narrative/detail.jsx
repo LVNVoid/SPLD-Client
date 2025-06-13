@@ -1,5 +1,5 @@
+import { motion } from "framer-motion";
 import NarrativeDetail from "@/components/narrative/NarrativeDetail";
-import PublicNarrativeDetail from "@/components/public/narrative/PublicNarrativeDetail";
 import useCrud from "@/hooks/useCrud";
 import { ChevronLeft } from "lucide-react";
 import React, { useEffect, useState } from "react";
@@ -19,22 +19,53 @@ const PublicDetailNarrativePage = () => {
     }
   }, [narrativeId, getData]);
 
-  if (detailLoading) return <div className="p-4">Loading...</div>;
-  if (error) return <div className="p-4 text-red-500">Error: {error}</div>;
+  if (detailLoading)
+    return (
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="p-4"
+      >
+        Loading...
+      </motion.div>
+    );
+
+  if (error)
+    return (
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="p-4 text-red-500"
+      >
+        Error: {error}
+      </motion.div>
+    );
 
   return (
-    <div className="px-4 bg-background">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="px-4 bg-background"
+    >
       <div className="max-w-6xl mx-auto px-4 py-4">
-        <Link to="/narrative" className="flex items-center gap-2 text-primary">
-          <ChevronLeft className="w-4 h-4 md:w-6 md:h-6 text-primary" />
-          <span className="text-primary text-sm md:text-md font-semibold">
-            Kembali ke Daftar Narasi
-          </span>
-        </Link>
+        <motion.div
+          whileHover={{ x: -3 }}
+          transition={{ type: "spring", stiffness: 400 }}
+        >
+          <Link
+            to="/narrative"
+            className="flex items-center gap-2 text-primary"
+          >
+            <ChevronLeft className="w-4 h-4 md:w-6 md:h-6 text-primary" />
+            <span className="text-primary text-sm md:text-md font-semibold">
+              Kembali ke Daftar Narasi
+            </span>
+          </Link>
+        </motion.div>
 
         {narrative && <NarrativeDetail narrative={narrative} />}
       </div>
-    </div>
+    </motion.div>
   );
 };
 

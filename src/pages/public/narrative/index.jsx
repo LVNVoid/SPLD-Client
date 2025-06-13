@@ -1,10 +1,33 @@
 import React, { useState, useMemo } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import useCrud from "@/hooks/useCrud";
 import { NarrativeList } from "@/components/public/narrative/NarrativeList";
 import { FilterToolbar } from "@/components/public/narrative/FilterToolbar";
 import { Pagination } from "@/components/public/narrative/Pagination";
 
 const ITEMS_PER_PAGE = 5;
+
+// Animation variants
+const containerVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0 },
+};
+
+const pageTransition = {
+  type: "tween",
+  ease: "anticipate",
+  duration: 0.5,
+};
 
 export default function PublicNarrativesPage() {
   const [search, setSearch] = useState("");
@@ -31,9 +54,6 @@ export default function PublicNarrativesPage() {
       date: narrative.publishedAt,
     }));
   }, [apiData]);
-
-  console.count("Rendering apiData:");
-  console.log("Current data:", apiData);
 
   const authors = useMemo(() => {
     const unique = [...new Set(allNarratives.map((n) => n.author))];
@@ -69,45 +89,107 @@ export default function PublicNarrativesPage() {
   };
 
   if (loading) {
-    return <div className="w-full p-4 md:p-6">Memuat data...</div>;
+    return (
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="w-full p-4 md:p-6"
+      >
+        Memuat data...
+      </motion.div>
+    );
   }
 
   if (error) {
     return (
-      <div className="w-full p-4 md:p-6 text-red-500">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="w-full p-4 md:p-6 text-red-500"
+      >
         Gagal memuat data: {error}
-      </div>
+      </motion.div>
     );
   }
 
   return (
-    <div className="w-full p-4 md:p-6 space-y-6">
-      <h1 className="text-4xl font-bold px-2">Narasi Publik</h1>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className="w-full p-4 md:p-6 space-y-6"
+    >
+      <motion.h1
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.2 }}
+        className="text-4xl font-bold px-2"
+      >
+        Narasi Publik
+      </motion.h1>
 
-      <FilterToolbar
-        search={search}
-        onSearchChange={handleSearchChange}
-        authorFilter={authorFilter}
-        onAuthorFilterChange={handleAuthorFilterChange}
-        authors={authors}
-      />
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.3 }}
+      >
+        <FilterToolbar
+          search={search}
+          onSearchChange={handleSearchChange}
+          authorFilter={authorFilter}
+          onAuthorFilterChange={handleAuthorFilterChange}
+          authors={authors}
+        />
+      </motion.div>
 
-      {paginatedNarratives.length === 0 ? (
-        <div className="text-center py-8 text-muted-foreground">
-          Tidak ada narasi yang ditemukan
-        </div>
-      ) : (
-        paginatedNarratives.map((narrative) => (
-          <NarrativeList key={narrative.id} narrative={narrative} />
-        ))
-      )}
+      <AnimatePresence mode="wait">
+        {paginatedNarratives.length === 0 ? (
+          <motion.div
+            key="empty-state"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={pageTransition}
+            className="text-center py-8 text-muted-foreground"
+          >
+            Tidak ada narasi yang ditemukan
+          </motion.div>
+        ) : (
+          <motion.div
+            key="narratives-list"
+            variants={containerVariants}
+            initial="hidden"
+            animate="show"
+            className="space-y-6"
+          >
+            <AnimatePresence>
+              {paginatedNarratives.map((narrative) => (
+                <motion.div
+                  key={narrative.id}
+                  layout
+                  variants={itemVariants}
+                  transition={pageTransition}
+                >
+                  <NarrativeList narrative={narrative} />
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPrevious={handlePreviousPage}
-        onNext={handleNextPage}
-      />
-    </div>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.4 }}
+      >
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPrevious={handlePreviousPage}
+          onNext={handleNextPage}
+        />
+      </motion.div>
+    </motion.div>
   );
 }
