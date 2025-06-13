@@ -1,6 +1,6 @@
 import { useState } from "react";
 import DeleteModal from "../ui/delete-modal";
-import { columns as baseColumns } from "./columns";
+import { columns as baseColumns } from "./Columns";
 import { DataTable } from "./DataTable";
 import toast from "react-hot-toast";
 import useCrud from "@/hooks/useCrud";
