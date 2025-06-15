@@ -67,9 +67,9 @@ const NarrativeDetail = ({ narrative }) => {
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.2 }}
       >
-        <h1 className="text-3xl font-bold text-primary">{title}</h1>
+        <h1 className="text-lg sm:text-3xl font-bold text-primary">{title}</h1>
         <motion.div
-          className="flex items-center gap-3 text-sm pt-2"
+          className="flex flex-wrap items-center gap-2 text-sm pt-2"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
@@ -87,7 +87,7 @@ const NarrativeDetail = ({ narrative }) => {
 
       {/* Image Carousel */}
       {images.length > 0 ? (
-        <div className="relative w-full h-96 md:h-[500px] overflow-hidden rounded-sm bg-gray-100">
+        <div className="relative w-full h-64 sm:h-80 md:h-[500px] overflow-hidden rounded-sm bg-gray-100">
           <AnimatePresence custom={direction} initial={false}>
             <motion.img
               key={currentIndex}
@@ -116,7 +116,7 @@ const NarrativeDetail = ({ narrative }) => {
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
               >
-                <ChevronLeft className="h-4 w-4" />
+                <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
               </Button>
 
               <Button
@@ -127,7 +127,7 @@ const NarrativeDetail = ({ narrative }) => {
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
               >
-                <ChevronRight className="h-4 w-4" />
+                <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
               </Button>
             </>
           )}
@@ -182,7 +182,7 @@ const NarrativeDetail = ({ narrative }) => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.6 }}
-        className="prose max-w-none prose-lg"
+        className="prose max-w-none prose-sm sm:prose-base md:prose-lg"
       >
         <div dangerouslySetInnerHTML={{ __html: content }} />
       </motion.div>

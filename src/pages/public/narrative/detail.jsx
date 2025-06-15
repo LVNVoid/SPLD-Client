@@ -47,7 +47,7 @@ const PublicDetailNarrativePage = () => {
       animate={{ opacity: 1 }}
       className="px-4 bg-background"
     >
-      <div className="max-w-6xl mx-auto px-4 py-4">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <motion.div
           whileHover={{ x: -3 }}
           transition={{ type: "spring", stiffness: 400 }}

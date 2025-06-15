@@ -4,6 +4,7 @@ import useCrud from "@/hooks/useCrud";
 import { NarrativeList } from "@/components/public/narrative/NarrativeList";
 import { Pagination } from "@/components/public/narrative/Pagination";
 import { FilterToolbar } from "@/components/FIlterToolbar";
+import { NarrativeSkeleton } from "@/components/public/narrative/NarrativeListSkeleton";
 
 const ITEMS_PER_PAGE = 5;
 
@@ -93,9 +94,18 @@ export default function PublicNarrativesPage() {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="w-full p-4 md:p-6"
+        className="w-full p-4 md:p-6 space-y-4"
       >
-        Memuat data...
+        {Array.from({ length: ITEMS_PER_PAGE }).map((_, i) => (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: i * 0.1 }}
+          >
+            <NarrativeSkeleton />
+          </motion.div>
+        ))}
       </motion.div>
     );
   }

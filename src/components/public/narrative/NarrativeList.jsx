@@ -8,13 +8,13 @@ import { motion } from "framer-motion";
 export function NarrativeList({ narrative }) {
   return (
     <Card className="w-full bg-background relative overflow-hidden rounded-sm p-4 hover:shadow-md transition-shadow duration-300">
-      <div className="flex flex-col md:flex-row">
+      <div className="flex flex-col md:flex-row gap-4">
         <div className="relative md:w-2/5 lg:w-1/3 overflow-hidden">
           <div className="absolute inset-0" />
           <img
             src={narrative.imageUrl || "/placeholder.svg"}
             alt={narrative.title}
-            className="w-[600px] h-[250px] object-fill rounded-sm hover:scale-105 transition-transform duration-500"
+            className="w-full h-48 md:h-60 object-cover rounded-sm hover:scale-105 transition-transform duration-500"
           />
         </div>
 
