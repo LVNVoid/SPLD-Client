@@ -18,6 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import RichTextEditor from "../RichTextEditor/RichTextEditor";
 
 export default function NarrativeForm({ reportId, initialData }) {
   const navigate = useNavigate();
@@ -35,16 +36,19 @@ export default function NarrativeForm({ reportId, initialData }) {
   const [existingImages, setExistingImages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [isEditorReady, setIsEditorReady] = useState(false);
 
-  // Load data jika edit
   useEffect(() => {
     if (isEditMode) {
       setTitle(initialData.title || "");
       setContent(initialData.content || "");
       setStatus(initialData.status || "DRAFT");
       setExistingImages(initialData.images || []);
+      setIsEditorReady(true);
+    } else if (!isEditMode) {
+      setIsEditorReady(true);
     }
-  }, [initialData]);
+  }, [initialData, isEditMode]);
 
   const handleImageChange = (e) => {
     const files = [...e.target.files];
@@ -153,7 +157,7 @@ export default function NarrativeForm({ reportId, initialData }) {
     <div className="w-full py-8">
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="space-y-2">
-          <Label htmlFor="title">Judul Narasi</Label>
+          <Label htmlFor="title">Judul</Label>
           <Input
             id="title"
             value={title}
@@ -164,15 +168,19 @@ export default function NarrativeForm({ reportId, initialData }) {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="content">Isi Narasi</Label>
-          <Textarea
-            id="content"
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            placeholder="Masukkan isi narasi..."
-            rows={4}
-            required
-          />
+          <Label htmlFor="content">Deskripsi</Label>
+          {isEditorReady ? (
+            <RichTextEditor
+              id="content"
+              value={content}
+              onChange={(value) => setContent(value)}
+              placeholder="Masukkan deskripsi..."
+            />
+          ) : (
+            <div className="h-[200px] w-full border rounded-md flex items-center justify-center">
+              <Loader2 className="h-6 w-6 animate-spin" />
+            </div>
+          )}
         </div>
 
         <div className="space-y-2">

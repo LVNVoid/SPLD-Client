@@ -54,10 +54,10 @@ const PublicDetailNarrativePage = () => {
         >
           <Link
             to="/narrative"
-            className="flex items-center gap-2 text-primary"
+            className="flex items-center gap-2 text-muted-foreground hover:text-primary"
           >
-            <ChevronLeft className="w-4 h-4 md:w-6 md:h-6 text-primary" />
-            <span className="text-primary text-sm md:text-md font-semibold">
+            <ChevronLeft className="w-4 h-4 md:w-6 md:h-6 " />
+            <span className="text-sm md:text-md font-medium">
               Kembali ke Daftar Narasi
             </span>
           </Link>

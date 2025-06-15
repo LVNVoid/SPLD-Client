@@ -124,3 +124,34 @@ html {
   font-family: "Inter", sans-serif;
   scroll-behavior: smooth;
 }
+
+.ql-container {
+  min-height: 200px;
+  font-size: 16px;
+  font-family: "Inter", sans-serif;
+}
+
+.ql-toolbar {
+  border-radius: 4px 4px 0 0;
+  -webkit-border-radius: 4px 4px 0 0;
+  -moz-border-radius: 4px 4px 0 0;
+  -ms-border-radius: 4px 4px 0 0;
+  -o-border-radius: 4px 4px 0 0;
+}
+
+.ql-container {
+  border-radius: 0 0 4px 4px;
+  -webkit-border-radius: 0 0 4px 4px;
+  -moz-border-radius: 0 0 4px 4px;
+  -ms-border-radius: 0 0 4px 4px;
+  -o-border-radius: 0 0 4px 4px;
+}
+
+.ql-editor {
+  min-height: 200px;
+}
+
+.ql-editor.ql-blank::before {
+  color: hsl(var(--muted-foreground));
+  font-style: normal;
+}

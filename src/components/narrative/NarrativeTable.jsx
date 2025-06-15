@@ -73,7 +73,7 @@ export default function NarrativeTable({
         <TableHeader>
           <TableRow>
             <TableHead>Judul Narasi</TableHead>
-            <TableHead>Konten</TableHead>
+            {/* <TableHead>Konten</TableHead> */}
             <TableHead>Tanggal Publikasi</TableHead>
             <TableHead>Status</TableHead>
             <TableHead>Penulis</TableHead>
@@ -83,8 +83,10 @@ export default function NarrativeTable({
         <TableBody>
           {narratives.map((narrative) => (
             <TableRow key={narrative.id}>
-              <TableCell className="font-medium">{narrative.title}</TableCell>
-              <TableCell>{truncateText(narrative.content, 50)}</TableCell>
+              <TableCell className="font-medium">
+                {truncateText(narrative.title, 60)}
+              </TableCell>
+              {/* <TableCell>{truncateText(narrative.content, 20)}</TableCell> */}
               <TableCell>
                 {narrative.publishedAt
                   ? formatDate(narrative.publishedAt)

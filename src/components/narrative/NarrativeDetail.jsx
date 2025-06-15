@@ -2,7 +2,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Calendar, ChevronLeft, ChevronRight, UserPen } from "lucide-react";
 import React, { useState, useEffect } from "react";
 import { formatDate } from "@/lib/utils";
 
@@ -69,19 +69,19 @@ const NarrativeDetail = ({ narrative }) => {
       >
         <h1 className="text-lg sm:text-3xl font-bold text-primary">{title}</h1>
         <motion.div
-          className="flex flex-wrap items-center gap-2 text-sm pt-2"
+          className="flex flex-col gap-2 text-sm pt-2"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
         >
-          <Avatar className="w-8 h-8">
-            <AvatarFallback>
-              {author?.name?.slice(0, 2).toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
-          <span>{author?.name}</span>
-          <span>|</span>
-          <span>{formatDate(new Date(publishedAt))}</span>
+          <div className="flex items-center gap-2">
+            <UserPen size={16} />
+            {author?.name}
+          </div>
+          <div className="flex items-center gap-2">
+            <Calendar size={16} />
+            {formatDate(new Date(publishedAt))}
+          </div>
         </motion.div>
       </motion.div>
 
@@ -182,9 +182,19 @@ const NarrativeDetail = ({ narrative }) => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.6 }}
-        className="prose max-w-none prose-sm sm:prose-base md:prose-lg"
+        className="prose max-w-none prose-sm sm:prose-base md:prose-lg 
+                   prose-p:mb-6 prose-p:leading-relaxed 
+                   prose-headings:mb-4 prose-headings:mt-8
+                   prose-ul:mb-6 prose-ol:mb-6 prose-li:mb-2
+                   text-gray-700 leading-relaxed"
       >
-        <div dangerouslySetInnerHTML={{ __html: content }} />
+        <div
+          dangerouslySetInnerHTML={{ __html: content }}
+          className="space-y-4 [&>p]:mb-6 [&>h1]:mb-4 [&>h1]:mt-8 
+                     [&>h2]:mb-4 [&>h2]:mt-8 [&>h3]:mb-4 [&>h3]:mt-6
+                     [&>ul]:mb-6 [&>ol]:mb-6 [&>blockquote]:mb-6
+                     [&>div]:mb-4 [&>*]:leading-relaxed"
+        />
       </motion.div>
     </motion.div>
   );
