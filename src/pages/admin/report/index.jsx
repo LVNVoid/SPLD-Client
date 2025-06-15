@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Plus, Search } from "lucide-react";
+import { Plus, PlusCircle, Search } from "lucide-react";
 import useCrud from "@/hooks/useCrud";
 import ReportTable from "@/components/report/ReportTable";
 import ReportFormModal from "@/components/report/ReportFormModal";
@@ -36,25 +36,30 @@ export default function ReportPage() {
   return (
     <div className="container mx-auto py-8 px-4">
       <div className="mb-4">
-        <h1 className="text-2xl font-bold">Laporan</h1>
-        <p className="text-muted-foreground">
+        <h1 className="text-lg md:text-2xl font-bold">Laporan</h1>
+        <p className="text-sm md:text-base text-muted-foreground">
           Kelola dan lihat semua laporan dalam sistem. Anda dapat mencari dan
           menambahkan laporan baru.
         </p>
       </div>
-      <div className="flex md:flex-row gap-4 mb-6 justify-between">
+      <div className="flex md:flex-row gap-4 mb-6 justify-between items-center">
         <div className="relative flex-1 max-w-lg">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             placeholder="Cari laporan..."
-            className="pl-8"
+            className="text-sm md:text-base pl-8"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
         {isPolsek && (
           <ReportFormModal
-            trigger={<Button>Tambah Laporan</Button>}
+            trigger={
+              <Button variant="default" size={"sm"}>
+                <PlusCircle className="h-4 w-4" />
+                <span className="sr-only md:not-sr-only">Tambah Laporan</span>
+              </Button>
+            }
             onSuccess={handleSuccess}
           />
         )}

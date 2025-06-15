@@ -3,7 +3,7 @@ import PolsekTable from "@/components/polsek/PolsekTable";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import useCrud from "@/hooks/useCrud";
-import { Search } from "lucide-react";
+import { PlusCircle, Search } from "lucide-react";
 import { useState } from "react";
 
 const PolsekPage = () => {
@@ -41,7 +41,12 @@ const PolsekPage = () => {
           />
         </div>
         <PolsekFormModal
-          trigger={<Button>Tambah Data Polsek</Button>}
+          trigger={
+            <Button>
+              <PlusCircle className="h-4 w-4" />
+              <span className="sr-only md:not-sr-only">Tambah Polsek</span>
+            </Button>
+          }
           onSuccess={handleSuccess}
         />
       </div>

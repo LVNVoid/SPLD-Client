@@ -13,7 +13,7 @@ const ReportDetailSkeleton = () => {
         </div>
       </div>
 
-      <Card>
+      <Card className="bg-background">
         <CardHeader>
           <div className="space-y-3">
             <Skeleton className="h-8 w-3/4" />

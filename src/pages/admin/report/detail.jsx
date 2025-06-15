@@ -99,12 +99,12 @@ export default function DetailReportPage() {
 
   if (error) {
     return (
-      <div className="flex flex-row justify-center items-center">
-        <div>
+      <div className="container mx-auto p-4">
+        <div className="max-w-2xl mx-auto">
           <Alert variant="destructive">
             <AlertDescription>{error}</AlertDescription>
           </Alert>
-          <div className="flex gap-2 mt-4">
+          <div className="flex flex-col sm:flex-row gap-2 mt-4">
             <Button variant="outline" onClick={() => navigate("/admin/report")}>
               <ArrowLeft className="mr-2 h-4 w-4" />
               Kembali ke Daftar Laporan
@@ -121,32 +121,37 @@ export default function DetailReportPage() {
 
   if (!report) {
     return (
-      <div className="max-w-4xl mx-auto p-6">
-        <Alert>
-          <AlertDescription>Laporan tidak ditemukan</AlertDescription>
-        </Alert>
-        <Button
-          variant="outline"
-          onClick={() => navigate("/admin/report")}
-          className="mt-4"
-        >
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Kembali ke Daftar Laporan
-        </Button>
+      <div className="container mx-auto p-4">
+        <div className="max-w-2xl mx-auto">
+          <Alert>
+            <AlertDescription>Laporan tidak ditemukan</AlertDescription>
+          </Alert>
+          <Button
+            variant="outline"
+            onClick={() => navigate("/admin/report")}
+            className="mt-4"
+          >
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Kembali ke Daftar Laporan
+          </Button>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="w-full mx-auto p-6 space-y-6">
-      {/* Header with Navigation */}
-      <div className="flex items-center justify-between">
-        <Button variant="ghost" onClick={() => navigate("/admin/report")}>
+    <div className="container mx-auto p-4 space-y-6">
+      <div className="flex items-center justify-between gap-4">
+        <Button
+          variant="ghost"
+          onClick={() => navigate("/admin/report")}
+          className="self-start sm:self-center"
+        >
           <ArrowLeft className="mr-2 h-4 w-4" />
-          Kembali
+          <span>Kembali</span>
         </Button>
 
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2 w-full sm:w-auto justify-end">
           <Button
             variant="outline"
             size="sm"
@@ -154,20 +159,21 @@ export default function DetailReportPage() {
             disabled={detailLoading}
           >
             <RefreshCw
-              className={`mr-2 h-4 w-4 ${detailLoading ? "animate-spin" : ""}`}
+              className={`h-4 w-4 ${detailLoading ? "animate-spin" : ""}`}
             />
-            Refresh
+            <span className="sr-only sm:not-sr-only">Refresh</span>
           </Button>
           <Button variant="outline" size="sm" onClick={handleShare}>
-            <Share2 className="mr-2 h-4 w-4" />
-            Bagikan
+            <Share2 className="h-4 w-4" />
+            <span className="sr-only sm:not-sr-only">Bagikan</span>
           </Button>
           {isHumas && (
             <Button
               onClick={() => navigate(`/admin/narrative/add/${reportId}`)}
               size="sm"
+              className="whitespace-nowrap"
             >
-              <PlusCircle className="mr-2 h4 w-4" />
+              <PlusCircle className="h4 w-4" />
               Buat Narasi
             </Button>
           )}
@@ -175,28 +181,28 @@ export default function DetailReportPage() {
       </div>
 
       {/* Main Content */}
-      <Card className="bg-baclkground">
+      <Card className="bg-background">
         <CardHeader>
-          <div className="flex items-start justify-between">
-            <div className="space-y-2">
-              <CardTitle className="text-2xl font-bold leading-tight">
-                {report.title}
-              </CardTitle>
-              <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                <div className="flex items-center gap-1">
-                  <Calendar className="h-4 w-4" />
-                  {formatDate(report.createdAt)}
-                </div>
-                <div className="flex items-center gap-1">
-                  <div className="bg-gradient-to-r from-sky-400 to-indigo-600 rounded-full p-[2px] flex items-center justify-center">
-                    <Badge className="bg-background hover:bg-background text-foreground rounded-full border-none">
-                      {report.author.polsek?.name}
-                    </Badge>
-                  </div>
-                </div>
-                <div className="flex items-center gap-1">
-                  <User className="h-4 w-4" />
-                  {report.author.name}
+          <div className="space-y-4">
+            <CardTitle className="text-xl md:text-2xl font-bold leading-tight">
+              {report.title}
+            </CardTitle>
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-sm text-muted-foreground">
+              <div className="flex items-center gap-1">
+                <Calendar className="h-4 w-4 flex-shrink-0" />
+                <span>{formatDate(report.createdAt)}</span>
+              </div>
+
+              <div className="flex items-center gap-1">
+                <User className="h-4 w-4 flex-shrink-0" />
+                <span>{report.author.name}</span>
+              </div>
+
+              <div className="flex items-center gap-1">
+                <div className="bg-gradient-to-r from-sky-400 to-indigo-600 rounded-full p-[2px] flex items-center justify-center">
+                  <Badge className="bg-background hover:bg-background text-foreground rounded-full border-none">
+                    {report.author.polsek?.name || "-"}
+                  </Badge>
                 </div>
               </div>
             </div>
@@ -220,21 +226,22 @@ export default function DetailReportPage() {
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold flex items-center gap-2">
                   <ImageIcon className="h-5 w-5" />
-                  Foto laporan
+                  Dokumentasi laporan
                 </h3>
               </div>
 
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
                 {report.images.map((image, index) => (
                   <div
                     key={index}
-                    className="relative group cursor-pointer rounded-lg overflow-hidden border  aspect-square"
+                    className="relative group cursor-pointer rounded-lg overflow-hidden border aspect-square"
                     onClick={() => handleImageClick(index)}
                   >
                     <img
                       src={image.url || "/placeholder.svg"}
                       alt={`Gambar ${index + 1}`}
-                      className="w-full h-full object-contain transition-transform group-hover:scale-105"
+                      className="w-full h-full object-cover transition-transform group-hover:scale-105"
+                      loading="lazy"
                     />
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
                       <ZoomIn className="h-6 w-6 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -262,7 +269,7 @@ export default function DetailReportPage() {
 
       {/* Image Modal/Lightbox */}
       <Dialog open={isImageModalOpen} onOpenChange={setIsImageModalOpen}>
-        <DialogContent className="max-w-4xl w-full p-0">
+        <DialogContent className="max-w-[95vw] w-full p-0 sm:max-w-4xl">
           <div className="relative">
             <img
               src={
@@ -270,6 +277,7 @@ export default function DetailReportPage() {
               }
               alt={`Gambar ${selectedImageIndex + 1}`}
               className="w-full h-auto max-h-[80vh] object-contain"
+              loading="lazy"
             />
 
             {/* Navigation Buttons */}
@@ -278,7 +286,7 @@ export default function DetailReportPage() {
                 <Button
                   variant="secondary"
                   size="sm"
-                  className="absolute left-4 top-1/2 -translate-y-1/2"
+                  className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2"
                   onClick={prevImage}
                 >
                   <ChevronLeft className="h-4 w-4" />
@@ -286,7 +294,7 @@ export default function DetailReportPage() {
                 <Button
                   variant="secondary"
                   size="sm"
-                  className="absolute right-4 top-1/2 -translate-y-1/2"
+                  className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2"
                   onClick={nextImage}
                 >
                   <ChevronRight className="h-4 w-4" />
@@ -305,7 +313,7 @@ export default function DetailReportPage() {
             <Button
               variant="secondary"
               size="sm"
-              className="absolute top-4 right-4"
+              className="absolute top-2 sm:top-4 right-2 sm:right-4"
               onClick={() => {
                 const link = document.createElement("a");
                 link.href = report.images[selectedImageIndex].url;
