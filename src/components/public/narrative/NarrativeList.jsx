@@ -27,9 +27,12 @@ export function NarrativeList({ narrative }) {
             </CardHeader>
 
             <CardContent className="p-0">
-              <p className="text-muted-foreground leading-relaxed line-clamp-2 md:line-clamp-3 text-sm md:text-base">
-                {narrative.description}
-              </p>
+              <div
+                className="text-muted-foreground leading-relaxed line-clamp-2 md:line-clamp-3 text-sm md:text-base"
+                dangerouslySetInnerHTML={{
+                  __html: narrative.description,
+                }}
+              />
             </CardContent>
           </div>
 
