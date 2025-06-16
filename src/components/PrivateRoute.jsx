@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from "react-redux";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { login, logout } from "@/features/userSlice"; // pastikan ini sesuai pathmu
+import { login, logout } from "@/features/userSlice";
 import api from "@/lib/axios";
 
 const PrivateRoute = ({ allowedRoles }) => {
