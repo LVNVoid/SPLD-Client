@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from "react-redux";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { login } from "@/features/userSlice"; // pastikan ini sesuai pathmu
+import { login, logout } from "@/features/userSlice"; // pastikan ini sesuai pathmu
 import api from "@/lib/axios";
 
 const PrivateRoute = ({ allowedRoles }) => {
@@ -18,7 +18,7 @@ const PrivateRoute = ({ allowedRoles }) => {
         const data = await res.json();
         dispatch(login(data.user));
       } catch (err) {
-        console.log(err);
+        dispatch(logout());
       } finally {
         setCheckingAuth(false);
       }
