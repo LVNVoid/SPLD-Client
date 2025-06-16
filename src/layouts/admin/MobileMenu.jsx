@@ -9,10 +9,19 @@ import { SheetContent, SheetTrigger } from "@/components/ui/sheet";
 export function MobileMenu({ user, navigationItems, isActive }) {
   return (
     <SheetContent side="left" className="w-72 p-0">
-      <div className="border-b px-6 py-4">
+      <div className="border-b px-4 py-4">
         <div className="flex items-center justify-between">
           <Link to="/admin" className="flex items-center">
-            <span className="font-bold text-xl">SPLD</span>
+            <img
+              src="logo-light.png"
+              alt="SPLD Logo Light"
+              className="block dark:hidden h-15"
+            />
+            <img
+              src="logo-dark.png"
+              alt="SPLD Logo Dark"
+              className="hidden dark:block h-15"
+            />
           </Link>
           <SheetTrigger asChild>
             <Button variant="ghost" size="icon">

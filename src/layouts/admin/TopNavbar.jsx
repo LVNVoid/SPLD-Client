@@ -35,12 +35,16 @@ export function TopNavbar({
 
           {/* Desktop Logo */}
           <Link to="/admin" className="hidden md:flex items-center space-x-2">
-            <div className="h-8 w-8 rounded-full  flex items-center justify-center">
-              <span className="text-primary font-bold">
-                <Shield className="h-6 w-6 text-primary" />
-              </span>
-            </div>
-            <span className="font-bold text-xl">SPLD</span>
+            <img
+              src="logo-light.png"
+              alt="SPLD Logo Light"
+              className="block dark:hidden h-15"
+            />
+            <img
+              src="logo-dark.png"
+              alt="SPLD Logo Dark"
+              className="hidden dark:block h-15"
+            />
           </Link>
         </div>
 

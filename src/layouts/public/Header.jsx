@@ -15,10 +15,19 @@ const Header = ({ theme, setTheme, isMounted }) => {
 
   return (
     <header className="border-b">
-      <div className="px-4 py-4 flex items-center justify-between">
+      <div className="px-4 py-2 flex items-center justify-between">
         <div className="flex items-center">
           <Link to="/" className="text-2xl font-bold">
-            SPLD
+            <img
+              src="logo-light.png"
+              alt="SPLD Logo Light"
+              className="block dark:hidden h-15"
+            />
+            <img
+              src="logo-dark.png"
+              alt="SPLD Logo Dark"
+              className="hidden dark:block h-15"
+            />
           </Link>
         </div>
 
