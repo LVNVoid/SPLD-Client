@@ -56,7 +56,7 @@ export default function ReportPage() {
           <ReportFormModal
             trigger={
               <Button>
-                <PlusCircle className="h-4 w-4" size={"sm"} />
+                <PlusCircle className="h-4 w-4" />
                 <span className="sr-only md:not-sr-only">Tambah Laporan</span>
               </Button>
             }

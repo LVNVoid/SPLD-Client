@@ -99,7 +99,7 @@ export default function ReportTable({ reports, onSuccess, isPolsek }) {
                   <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className="h-8 w-8 p-0">
                       <span className="sr-only">Open menu</span>
-                      <MoreHorizontal className="h-4 w-4" />
+                      <MoreHorizontal width={16} height={16} />
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
