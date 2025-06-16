@@ -28,9 +28,16 @@ export default function useCrud(endpoint, options = {}) {
         const url = queryString ? `${endpoint}?${queryString}` : endpoint;
         const res = await api.get(url);
 
-        // Handle different response structures
-        const responseData = res.data?.data || res.data;
-        setData(Array.isArray(responseData) ? responseData : []);
+        let responseData;
+        if (res.data?.data !== undefined) {
+          responseData = res.data.data;
+        } else if (Array.isArray(res.data)) {
+          responseData = res.data;
+        } else {
+          responseData = res.data;
+        }
+
+        setData(responseData);
         return responseData;
       } catch (err) {
         const errorMessage =
