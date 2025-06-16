@@ -8,7 +8,6 @@ import { NarrativeSkeleton } from "@/components/public/narrative/NarrativeListSk
 
 const ITEMS_PER_PAGE = 5;
 
-// Animation variants
 const containerVariants = {
   hidden: { opacity: 0 },
   show: {
@@ -34,6 +33,7 @@ export default function PublicNarrativesPage() {
   const [search, setSearch] = useState("");
   const [authorFilter, setAuthorFilter] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
+  const [sortOrder, setSortOrder] = useState("desc");
 
   const {
     data: apiData,
@@ -62,15 +62,26 @@ export default function PublicNarrativesPage() {
   }, [allNarratives]);
 
   const filteredNarratives = useMemo(() => {
-    return allNarratives.filter((n) => {
+    let result = allNarratives.filter((n) => {
       const matchSearch =
         n.title.toLowerCase().includes(search.toLowerCase()) ||
         n.description.toLowerCase().includes(search.toLowerCase());
+
       const matchAuthor =
         authorFilter === "all" ? true : n.author === authorFilter;
+
       return matchSearch && matchAuthor;
     });
-  }, [search, authorFilter, allNarratives]);
+
+    // Sort by date
+    result.sort((a, b) => {
+      const dateA = new Date(a.date);
+      const dateB = new Date(b.date);
+      return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
+    });
+
+    return result;
+  }, [search, authorFilter, sortOrder, allNarratives]);
 
   const totalPages = Math.ceil(filteredNarratives.length / ITEMS_PER_PAGE);
   const paginatedNarratives = filteredNarratives.slice(
@@ -88,39 +99,6 @@ export default function PublicNarrativesPage() {
     setAuthorFilter(value);
     setCurrentPage(1);
   };
-
-  if (loading) {
-    return (
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        className="w-full p-4 md:p-6 space-y-4"
-      >
-        {Array.from({ length: ITEMS_PER_PAGE }).map((_, i) => (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: i * 0.1 }}
-          >
-            <NarrativeSkeleton />
-          </motion.div>
-        ))}
-      </motion.div>
-    );
-  }
-
-  if (error) {
-    return (
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        className="w-full p-4 md:p-6 text-red-500"
-      >
-        Gagal memuat data: {error}
-      </motion.div>
-    );
-  }
 
   return (
     <motion.div
@@ -149,11 +127,22 @@ export default function PublicNarrativesPage() {
           authorFilter={authorFilter}
           onAuthorFilterChange={handleAuthorFilterChange}
           authors={authors}
+          sortOrder={sortOrder}
+          onSortOrderChange={(value) => {
+            setSortOrder(value);
+            setCurrentPage(1);
+          }}
         />
       </motion.div>
 
       <AnimatePresence mode="wait">
-        {paginatedNarratives.length === 0 ? (
+        {loading ? (
+          <div className="space-y-6">
+            {[...Array(ITEMS_PER_PAGE)].map((_, i) => (
+              <NarrativeSkeleton key={i} />
+            ))}
+          </div>
+        ) : paginatedNarratives.length === 0 ? (
           <motion.div
             key="empty-state"
             initial={{ opacity: 0 }}

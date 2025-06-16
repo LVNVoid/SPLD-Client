@@ -1,11 +1,11 @@
-import { Input } from "@/components/ui/input";
+import { Input } from "./ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "./ui/select";
 
 export function FilterToolbar({
   search,
@@ -13,20 +13,21 @@ export function FilterToolbar({
   authorFilter,
   onAuthorFilterChange,
   authors,
+  sortOrder,
+  onSortOrderChange,
 }) {
   return (
-    <div className="flex  items-center justify-between gap-x-2">
-      <div className="w-full">
-        <Input
-          placeholder="Cari narasi..."
-          className="w-full md:w-64 "
-          value={search}
-          onChange={(e) => onSearchChange(e.target.value)}
-        />
-      </div>
-      <div>
+    <div className="flex flex-col md:flex-row items-center justify-between gap-2 md:gap-4">
+      <Input
+        placeholder="Cari narasi..."
+        className="w-full md:w-64"
+        value={search}
+        onChange={(e) => onSearchChange(e.target.value)}
+      />
+
+      <div className="flex items-center gap-2">
         <Select value={authorFilter} onValueChange={onAuthorFilterChange}>
-          <SelectTrigger className="w-full md:w-48 ">
+          <SelectTrigger className="w-full max-w-68">
             <SelectValue placeholder="Filter Penulis" />
           </SelectTrigger>
           <SelectContent>
@@ -36,6 +37,15 @@ export function FilterToolbar({
                 {author}
               </SelectItem>
             ))}
+          </SelectContent>
+        </Select>
+        <Select value={sortOrder} onValueChange={onSortOrderChange}>
+          <SelectTrigger className="w-full md:w-48">
+            <SelectValue placeholder="Urutkan" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="desc">Terbaru</SelectItem>
+            <SelectItem value="asc">Terlama</SelectItem>
           </SelectContent>
         </Select>
       </div>

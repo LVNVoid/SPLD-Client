@@ -9,7 +9,7 @@ import { formatDate } from "@/lib/utils";
 const NarrativeDetail = ({ narrative }) => {
   const { title, content, publishedAt, images = [], author } = narrative;
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [direction, setDirection] = useState(1); // 1 for next, -1 for previous
+  const [direction, setDirection] = useState(1);
 
   useEffect(() => {
     if (images.length <= 1) return;
@@ -113,8 +113,6 @@ const NarrativeDetail = ({ narrative }) => {
                 size="icon"
                 className="absolute left-4 top-1/2 transform -translate-y-1/2 backdrop-blur-sm hover:bg-primary/20"
                 onClick={goToPrevious}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
               >
                 <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
               </Button>
@@ -124,8 +122,6 @@ const NarrativeDetail = ({ narrative }) => {
                 size="icon"
                 className="absolute right-4 top-1/2 transform -translate-y-1/2 backdrop-blur-sm hover:bg-primary/20"
                 onClick={goToNext}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
               >
                 <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
               </Button>
