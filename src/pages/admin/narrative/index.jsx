@@ -34,10 +34,10 @@ const NarrativePage = () => {
   };
 
   return (
-    <div className="container mx-auto py-8 px-4">
-      <div className="mb-4">
-        <h1 className="text-2xl font-bold">Narasi</h1>
-        <p className="text-muted-foreground">
+    <div className="space-y-4">
+      <div>
+        <h1 className="text-lg md:text-2xl font-bold">Narasi</h1>
+        <p className="text-sm md:text-base text-muted-foreground">
           Kelola dan lihat semua narasi dalam sistem. Anda dapat mencari dan
           menambahkan narasi baru.
         </p>
@@ -47,7 +47,7 @@ const NarrativePage = () => {
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             placeholder="Cari narasi..."
-            className="pl-8"
+            className="text-sm md:text-base pl-8"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />

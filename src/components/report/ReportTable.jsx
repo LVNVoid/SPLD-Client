@@ -21,6 +21,7 @@ import useCrud from "@/hooks/useCrud";
 import DeleteModal from "../ui/delete-modal";
 import ReportFormModal from "./ReportFormModal";
 import toast from "react-hot-toast";
+import { PolsekBadge } from "../ui/polsek-badge";
 
 export default function ReportTable({ reports, onSuccess, isPolsek }) {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -74,7 +75,7 @@ export default function ReportTable({ reports, onSuccess, isPolsek }) {
             <TableHead>Judul Laporan</TableHead>
             <TableHead>Deskripsi</TableHead>
             <TableHead>Tanggal</TableHead>
-            <TableHead>Penulis</TableHead>
+            <TableHead>Author</TableHead>
             <TableHead></TableHead>
           </TableRow>
         </TableHeader>
@@ -86,7 +87,13 @@ export default function ReportTable({ reports, onSuccess, isPolsek }) {
                 {truncateText(report.description, 50)}
               </TableCell>
               <TableCell>{formatDate(report.date)}</TableCell>
-              <TableCell>{report.author?.polsek?.name ?? "-"}</TableCell>
+              <TableCell>
+                {report.author?.polsek?.name ? (
+                  <PolsekBadge name={report.author.polsek.name} />
+                ) : (
+                  "-"
+                )}
+              </TableCell>
               <TableCell>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>

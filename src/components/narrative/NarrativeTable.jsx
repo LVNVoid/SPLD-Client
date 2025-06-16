@@ -19,6 +19,7 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import useCrud from "@/hooks/useCrud";
 import DeleteModal from "../ui/delete-modal";
+import { StatusBadge } from "../ui/status-badge";
 
 export default function NarrativeTable({
   narratives,
@@ -92,7 +93,9 @@ export default function NarrativeTable({
                   ? formatDate(narrative.publishedAt)
                   : "-"}
               </TableCell>
-              <TableCell>{narrative.status}</TableCell>
+              <TableCell>
+                <StatusBadge status={narrative.status} />
+              </TableCell>
               <TableCell>{narrative.author?.name ?? "-"}</TableCell>
               <TableCell>
                 <DropdownMenu>

@@ -109,7 +109,7 @@ const NarrativeDetail = ({ narrative }) => {
           {images.length > 1 && (
             <>
               <Button
-                variant="secondary"
+                variant="ghost"
                 size="icon"
                 className="absolute left-4 top-1/2 transform -translate-y-1/2 backdrop-blur-sm hover:bg-primary/20"
                 onClick={goToPrevious}
@@ -120,7 +120,7 @@ const NarrativeDetail = ({ narrative }) => {
               </Button>
 
               <Button
-                variant="secondary"
+                variant="ghost"
                 size="icon"
                 className="absolute right-4 top-1/2 transform -translate-y-1/2 backdrop-blur-sm hover:bg-primary/20"
                 onClick={goToNext}
@@ -177,7 +177,6 @@ const NarrativeDetail = ({ narrative }) => {
         </motion.div>
       )}
 
-      {/* Content */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -186,7 +185,7 @@ const NarrativeDetail = ({ narrative }) => {
                    prose-p:mb-6 prose-p:leading-relaxed 
                    prose-headings:mb-4 prose-headings:mt-8
                    prose-ul:mb-6 prose-ol:mb-6 prose-li:mb-2
-                   text-gray-700 leading-relaxed"
+                   leading-relaxed text-primary/80 text-sm md:text-base"
       >
         <div
           dangerouslySetInnerHTML={{ __html: content }}

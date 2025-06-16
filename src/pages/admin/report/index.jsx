@@ -34,8 +34,8 @@ export default function ReportPage() {
   };
 
   return (
-    <div className="container mx-auto py-8 px-4">
-      <div className="mb-4">
+    <div className="space-y-4">
+      <div>
         <h1 className="text-lg md:text-2xl font-bold">Laporan</h1>
         <p className="text-sm md:text-base text-muted-foreground">
           Kelola dan lihat semua laporan dalam sistem. Anda dapat mencari dan
@@ -55,8 +55,8 @@ export default function ReportPage() {
         {isPolsek && (
           <ReportFormModal
             trigger={
-              <Button variant="default" size={"sm"}>
-                <PlusCircle className="h-4 w-4" />
+              <Button>
+                <PlusCircle className="h-4 w-4" size={"sm"} />
                 <span className="sr-only md:not-sr-only">Tambah Laporan</span>
               </Button>
             }
