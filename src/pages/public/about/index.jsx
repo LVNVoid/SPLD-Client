@@ -22,7 +22,7 @@ export default function PublicAboutPage() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="container w-full py-12 px-4 md:px-6"
+      className="container w-full py-8 md:py-12 px-4 sm:px-6 lg:px-8"
     >
       <motion.div
         variants={container}
@@ -32,14 +32,14 @@ export default function PublicAboutPage() {
       >
         <motion.h1
           variants={item}
-          className="text-3xl font-bold mb-6 text-primary"
+          className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 md:mb-6 text-primary"
         >
           Tentang Kami
         </motion.h1>
 
         <motion.p
           variants={item}
-          className="text-muted-foreground mb-8 text-lg leading-relaxed"
+          className="text-muted-foreground mb-6 md:mb-8 text-base sm:text-lg leading-relaxed"
         >
           Sistem Pendataan Laporan dan Dokumentasi (SPLD) adalah platform
           digital yang dibangun untuk meningkatkan efisiensi komunikasi dan
@@ -49,12 +49,12 @@ export default function PublicAboutPage() {
         </motion.p>
 
         <motion.div variants={item}>
-          <h2 className="text-2xl font-semibold mb-3 flex items-center">
-            <span className="w-2 h-6 bg-primary mr-2 rounded-full"></span>
+          <h2 className="text-xl sm:text-2xl font-semibold mb-2 sm:mb-3 flex items-center">
+            <span className="w-2 h-5 sm:h-6 bg-primary mr-2 rounded-full"></span>
             Visi
           </h2>
           <motion.p
-            className="mb-8 pl-4 border-l-2 border-primary/20 text-lg"
+            className="mb-6 md:mb-8 pl-4 border-l-2 border-primary/20 text-base sm:text-lg"
             whileHover={{ x: 5 }}
           >
             Menjadi platform terpercaya untuk manajemen pelaporan kepolisian
@@ -63,12 +63,12 @@ export default function PublicAboutPage() {
         </motion.div>
 
         <motion.div variants={item}>
-          <h2 className="text-2xl font-semibold mb-3 flex items-center">
-            <span className="w-2 h-6 bg-primary mr-2 rounded-full"></span>
+          <h2 className="text-xl sm:text-2xl font-semibold mb-2 sm:mb-3 flex items-center">
+            <span className="w-2 h-5 sm:h-6 bg-primary mr-2 rounded-full"></span>
             Misi
           </h2>
           <motion.ul
-            className="list-disc pl-8 space-y-3 text-lg"
+            className="list-disc pl-6 sm:pl-8 space-y-2 sm:space-y-3 text-base sm:text-lg"
             variants={container}
           >
             <motion.li

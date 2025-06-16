@@ -37,17 +37,19 @@ export default function PublicContactPage() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="container w-full py-12 px-4 md:px-6"
+      className="container w-full py-8 sm:py-10 md:py-12 px-4 sm:px-6 lg:px-8"
     >
       <div className="max-w-4xl mx-auto">
         <motion.div
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.2 }}
-          className="mb-8"
+          className="mb-6 sm:mb-8"
         >
-          <h1 className="text-3xl font-bold mb-3 text-primary">Kontak Kami</h1>
-          <p className="text-muted-foreground text-lg">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2 sm:mb-3 text-primary">
+            Kontak Kami
+          </h1>
+          <p className="text-muted-foreground text-base sm:text-lg">
             Jika Anda memiliki pertanyaan, saran, atau memerlukan bantuan,
             silakan hubungi kami melalui formulir di bawah ini.
           </p>
@@ -55,7 +57,7 @@ export default function PublicContactPage() {
 
         <motion.form
           onSubmit={handleSubmit(onSubmit)}
-          className="space-y-6 bg-background p-6 rounded-lg border border-border shadow-sm"
+          className="space-y-4 sm:space-y-6 bg-background p-4 sm:p-6 rounded-lg border border-border shadow-sm"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
@@ -69,20 +71,25 @@ export default function PublicContactPage() {
             animate="show"
             transition={{ duration: 0.5 }}
           >
-            <label htmlFor="name" className="block mb-2 font-medium">
+            <label
+              htmlFor="name"
+              className="block mb-1 sm:mb-2 font-medium text-sm sm:text-base"
+            >
               Nama
             </label>
             <Input
               id="name"
               placeholder="Nama lengkap Anda"
               {...register("name")}
-              className={errors.name ? "border-destructive" : ""}
+              className={`text-sm sm:text-base ${
+                errors.name ? "border-destructive" : ""
+              }`}
             />
             {errors.name && (
               <motion.p
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="text-destructive text-sm mt-1"
+                className="text-destructive text-xs sm:text-sm mt-1"
               >
                 {errors.name.message}
               </motion.p>
@@ -98,7 +105,10 @@ export default function PublicContactPage() {
             animate="show"
             transition={{ duration: 0.5, delay: 0.1 }}
           >
-            <label htmlFor="email" className="block mb-2 font-medium">
+            <label
+              htmlFor="email"
+              className="block mb-1 sm:mb-2 font-medium text-sm sm:text-base"
+            >
               Email
             </label>
             <Input
@@ -106,13 +116,15 @@ export default function PublicContactPage() {
               type="email"
               placeholder="email@contoh.com"
               {...register("email")}
-              className={errors.email ? "border-destructive" : ""}
+              className={`text-sm sm:text-base ${
+                errors.email ? "border-destructive" : ""
+              }`}
             />
             {errors.email && (
               <motion.p
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="text-destructive text-sm mt-1"
+                className="text-destructive text-xs sm:text-sm mt-1"
               >
                 {errors.email.message}
               </motion.p>
@@ -128,21 +140,26 @@ export default function PublicContactPage() {
             animate="show"
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            <label htmlFor="message" className="block mb-2 font-medium">
+            <label
+              htmlFor="message"
+              className="block mb-1 sm:mb-2 font-medium text-sm sm:text-base"
+            >
               Pesan
             </label>
             <Textarea
               id="message"
               placeholder="Tulis pesan Anda..."
-              rows={5}
+              rows={4}
+              className={`text-sm sm:text-base ${
+                errors.message ? "border-destructive" : ""
+              }`}
               {...register("message")}
-              className={errors.message ? "border-destructive" : ""}
             />
             {errors.message && (
               <motion.p
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="text-destructive text-sm mt-1"
+                className="text-destructive text-xs sm:text-sm mt-1"
               >
                 {errors.message.message}
               </motion.p>
@@ -153,10 +170,11 @@ export default function PublicContactPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6 }}
+            className="pt-2"
           >
             <Button
               type="submit"
-              className="w-full md:w-auto"
+              className="w-full sm:w-auto text-sm sm:text-base"
               disabled={isSubmitting}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
@@ -177,13 +195,17 @@ export default function PublicContactPage() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.8 }}
-          className="mt-12 p-6 bg-background border rounded-md shadow-sm"
+          className="mt-8 sm:mt-10 p-4 sm:p-6 bg-background border rounded-md shadow-sm"
         >
-          <h3 className="text-xl font-semibold mb-3">Kontak Langsung</h3>
-          <p className="text-muted-foreground mb-2">
+          <h3 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-3">
+            Kontak Langsung
+          </h3>
+          <p className="text-muted-foreground text-sm sm:text-base mb-1 sm:mb-2">
             Email: humas@polresmagelang.id
           </p>
-          <p className="text-muted-foreground">Telepon: (0293) 1234567</p>
+          <p className="text-muted-foreground text-sm sm:text-base">
+            Telepon: (0293) 1234567
+          </p>
         </motion.div>
       </div>
     </motion.section>
