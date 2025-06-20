@@ -37,7 +37,7 @@ const Header = ({ theme, setTheme, isMounted }) => {
             <Link
               key={item.to}
               to={item.to}
-              className={`text-sm font-medium transition-colors ${
+              className={`text-lg font-medium transition-colors ${
                 location.pathname === item.to
                   ? "text-primary font-semibold"
                   : "text-muted-foreground hover:text-primary"
